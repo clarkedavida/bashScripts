@@ -46,8 +46,18 @@ function _bashFail {
 
 
 #
+# PASS. Example use:
+#  _bashPass "Tests worked!"
+#
+function _bashPass {
+  echo -e "  ${cgrn}PASS $1 ${endc}"
+}
+
+
+#
 # CHECK FAIL. Example use:
 #   _checkForFail $? "Something went wrong."
+#
 function _checkForFail {
   if [ ! $1 -eq 0 ]; then
     echo -e "  ${cred}FAIL $2 ${endc}"
@@ -56,3 +66,11 @@ function _checkForFail {
 }
 
 
+#
+# CHECK EXTENSION. Example use:
+#   _checkExtension CampaignExample.xml xml
+#
+function _checkExtension {
+  case $1 in *.$2) return 1;; esac
+  return 0
+}
