@@ -18,7 +18,7 @@
 # Call using: bash concatenateFile.bash PREFIX EXTENSION 
 #
 
-source "/home/dclarke/scripts_bash/bashTools.bash"
+source ${bashToolsPath}"/bashTools.bash"
 
 PREFIX=$1
 EXTENSION=$2

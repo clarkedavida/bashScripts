@@ -35,7 +35,7 @@ EOF
 }
 
 # Set default program option.
-LANGUAGE="c"
+LANGUAGE="bash"
 FRONT=false
 PFILE=false
 

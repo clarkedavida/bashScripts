@@ -1,5 +1,5 @@
 #!/bin/bash
-source "/home/dclarke/scripts_bash/bashTools.bash"
+source ${bashToolsPath}"/bashTools.bash"
 
 if [ $beta -eq 6285 ]; then
   ml=00049375
