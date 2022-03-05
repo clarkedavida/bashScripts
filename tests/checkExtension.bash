@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source "../bashTools.bash"
+source ${bashToolsPath}"/bashTools.bash"
 
 
 lpass=1
