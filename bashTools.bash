@@ -1,7 +1,7 @@
 # 
 # bashTools.bash                                                               
 # 
-# D. Clarke, 19 Aug 2021 
+# D. Clarke
 # 
 # Some definitions and functions that one might use in a bash script. To
 # use these, just
@@ -73,4 +73,26 @@ function _checkForFail {
 function _checkExtension {
   case $1 in *.$2) return 1;; esac
   return 0
+}
+
+#
+# COMPRESS ALL SUBFOLDERS INTO TARBALLS. Example use:
+#   _createCompressedSubfolders folder
+#
+function _createCompressedSubfolders {
+  folder=$1
+  echo
+  echo "Compressing subfolders using tar..."
+  cd ${folder}
+  for subfolder in *; do
+    if [ ! -d ${subfolder} ]; then continue; fi
+    echo "  "${subfolder}
+    tar -zcf ${subfolder}.tgz ${subfolder}
+    _checkForFail $? "Unable to tar this folder, aborting."
+    rm -rf ${subfolder}
+  done
+  cd ..
+  echo
+  echo "Done."
+  echo
 }
