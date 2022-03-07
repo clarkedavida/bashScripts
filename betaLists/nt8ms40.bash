@@ -1,5 +1,6 @@
 #!/bin/bash
 source ${bashToolsPath}"/bashTools.bash"
+source "${bashToolsPath}/HotQCDTools.bash"
 
 if [[ $beta -eq 6260 ]]; then
   ml=002025

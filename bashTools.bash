@@ -5,7 +5,7 @@
 # 
 # Some definitions and functions that one might use in a bash script. To
 # use these, just
-#   source "/path/to/bashTools.bash"
+#   source "${bashToolsPath}/bashTools.bash"
 #
 
 
