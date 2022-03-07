@@ -11,8 +11,12 @@
 
 source "${bashToolsPath}/bashTools.bash"
 
+echo
+echo "tar -zxf on everyone in this folder:"
+echo
 for f in *.tgz; do
 
+  echo "  "${f}
   tar -zxf ${f}
   if [ $? -eq 0 ]; then
     rm ${f}
@@ -21,3 +25,6 @@ for f in *.tgz; do
   fi
 
 done
+echo
+echo "Done."
+echo
