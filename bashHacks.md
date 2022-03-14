@@ -2,7 +2,7 @@
 
 There are a bunch of tasks I have commonly need to do with Bash,
 but I have difficulty remembering the exact syntax for them. These
-tasks don't always lend themselves well to bash functions.
+tasks do not always lend themselves well to bash functions.
 
 ## Recursively find and replace in files
 ```shell

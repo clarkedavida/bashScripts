@@ -5,7 +5,7 @@
 # 
 # D. Clarke 
 # 
-# Untars everything within present directory, then deletes the folder after
+# Untars everything within present directory, then deletes the tarball after
 # it finished the untar. 
 # 
 

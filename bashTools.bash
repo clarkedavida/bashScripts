@@ -29,9 +29,7 @@ cwhi="\e[97m"
 #   _checkForError $? "That was not supposed to happen..."
 #
 function _checkForError {
-  if [ ! $1 -eq 0 ]; then
-    echo -e "  ${cred}ERROR $2 ${endc}"
-  fi
+  if [ ! $1 -eq 0 ]; then echo -e "  ${cred}ERROR $2 ${endc}"; fi
 }
 
 
@@ -59,10 +57,7 @@ function _bashPass {
 #   _checkForFail $? "Something went wrong."
 #
 function _checkForFail {
-  if [ ! $1 -eq 0 ]; then
-    echo -e "  ${cred}FAIL $2 ${endc}"
-    exit
-  fi
+  if [ ! $1 -eq 0 ]; then _bashFail $2; fi
 }
 
 
@@ -88,6 +83,28 @@ function _createCompressedSubfolders {
     if [ ! -d ${subfolder} ]; then continue; fi
     echo "  "${subfolder}
     tar -zcf ${subfolder}.tgz ${subfolder}
+    _checkForFail $? "Unable to tar this folder, aborting."
+    rm -rf ${subfolder}
+  done
+  cd ..
+  echo
+  echo "Done."
+  echo
+}
+
+#
+# COMBINE ALL SUBFOLDERS INTO UNCOMPRESSED TARBALLS. Example use:
+#   _createTarSubfolders folder
+#
+function _createTarSubfolders {
+  folder=$1
+  echo
+  echo "Combining subfolders using tar..."
+  cd ${folder}
+  for subfolder in *; do
+    if [ ! -d ${subfolder} ]; then continue; fi
+    echo "  "${subfolder}
+    tar -cf ${subfolder}.tar ${subfolder}
     _checkForFail $? "Unable to tar this folder, aborting."
     rm -rf ${subfolder}
   done
