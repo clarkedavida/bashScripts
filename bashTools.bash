@@ -38,7 +38,9 @@ function _checkForError {
 #   _bashFail "Division by zero!"
 #
 function _bashFail {
+  echo
   echo -e "  ${cred}FAIL $1 ${endc}"
+  echo
   exit
 } 
 
@@ -48,7 +50,9 @@ function _bashFail {
 #  _bashPass "Tests worked!"
 #
 function _bashPass {
+  echo
   echo -e "  ${cgrn}PASS $1 ${endc}"
+  echo
 }
 
 
@@ -69,6 +73,20 @@ function _checkExtension {
   case $1 in *.$2) return 1;; esac
   return 0
 }
+
+
+#
+# OUTPUT FOR TESTS. Example use:
+# _checkPassFail $? "Test name"
+#
+function _checkPassFail {
+  if [ $1 -eq 0 ]; then
+    _bashPass $2
+  else
+    _bashFail $2
+  fi
+}
+
 
 #
 # COMPRESS ALL SUBFOLDERS INTO TARBALLS. Example use:
