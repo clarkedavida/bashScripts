@@ -14,8 +14,12 @@ find . -type f -name "*.txt" -print0 | xargs -0 sed -i '' -e 's/foo/bar/g'
 ${X##*Y}
 ```
 
-## get everything in string X before marker Y
+## Get everything in string X before marker Y
 ```shell
 ${X%%Y*}
 ```
 
+## Get first 2 characters of X
+```shell
+${X:0:2}
+```
