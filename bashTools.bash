@@ -110,6 +110,7 @@ function _createCompressedSubfolders {
   echo
 }
 
+
 #
 # COMBINE ALL SUBFOLDERS INTO UNCOMPRESSED TARBALLS. Example use:
 #   _createTarSubfolders folder
@@ -130,4 +131,15 @@ function _createTarSubfolders {
   echo
   echo "Done."
   echo
+}
+
+
+#
+# Compare two files and return result.
+#   compareFiles file1 file2
+# Returns 0 if the files are identical.
+#
+function _compareFiles {
+  diff $1 $2 &>/dev/null
+  return $?
 }
