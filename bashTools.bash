@@ -61,7 +61,7 @@ function _bashPass {
 #   _checkForFail $? "Something went wrong."
 #
 function _checkForFail {
-  if [ ! $1 -eq 0 ]; then _bashFail $2; fi
+  if [ ! $1 -eq 0 ]; then _bashFail "$2"; fi
 }
 
 
