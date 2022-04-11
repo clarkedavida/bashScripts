@@ -68,10 +68,11 @@ function _checkForFail {
 #
 # CHECK EXTENSION. Example use:
 #   _checkExtension CampaignExample.xml xml
+# Returns 0 if the extension matches.
 #
 function _checkExtension {
-  case $1 in *.$2) return 1;; esac
-  return 0
+  case $1 in *.$2) return 0;; esac
+  return 1
 }
 
 
@@ -81,9 +82,9 @@ function _checkExtension {
 #
 function _checkPassFail {
   if [ $1 -eq 0 ]; then
-    _bashPass $2
+    _bashPass "$2"
   else
-    _bashFail $2
+    _bashFail "$2"
   fi
 }
 
@@ -93,7 +94,7 @@ function _checkPassFail {
 #   _createCompressedSubfolders folder
 #
 function _createCompressedSubfolders {
-  folder=$1
+  local folder=$1
   echo
   echo "Compressing subfolders using tar..."
   cd ${folder}
@@ -116,7 +117,7 @@ function _createCompressedSubfolders {
 #   _createTarSubfolders folder
 #
 function _createTarSubfolders {
-  folder=$1
+  local folder=$1
   echo
   echo "Combining subfolders using tar..."
   cd ${folder}
@@ -135,11 +136,38 @@ function _createTarSubfolders {
 
 
 #
-# Compare two files and return result.
-#   compareFiles file1 file2
+# COMPARE TWO FILES. Example use:
+#   _compareFiles file1 file2
 # Returns 0 if the files are identical.
 #
 function _compareFiles {
   diff $1 $2 &>/dev/null
   return $?
+}
+
+
+#
+# CHECK IF ELEMENT IN ARRAY. Example use:
+#   _checkInArray "element" "${array[@]}"
+# Returns 0 if it finds element in the array.
+#
+function _checkInArray {
+  local e match="$1"
+  shift
+  for e; do [[ "$e" == "$match" ]] && return 0; done
+  return 1
+}
+
+
+#
+# FLIP 0 TO 1 AND VICE-VERSA. Example use:
+#   _bitFlip $?
+function _bitFlip {
+  if [ "$1" -eq "0" ]; then
+    return 1
+  elif [ "$1" -eq "1" ]; then
+    return 0
+  else
+    _bashFail "_bitFlip can only take 0 or 1!"
+  fi
 }
