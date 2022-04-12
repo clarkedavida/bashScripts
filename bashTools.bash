@@ -25,16 +25,7 @@ cwhi="\e[97m"
 
 
 #
-# ERROR HANDLING. Example use:
-#   _checkForError $? "That was not supposed to happen..."
-#
-function _checkForError {
-  if [ ! $1 -eq 0 ]; then echo -e "  ${cred}ERROR $2 ${endc}"; fi
-}
-
-
-#
-# FAIL. Example use:
+# FAIL AND EXIT. Example use:
 #   _bashFail "Division by zero!"
 #
 function _bashFail {
@@ -42,17 +33,36 @@ function _bashFail {
   echo -e "  ${cred}FAIL $1 ${endc}"
   echo
   exit
+}
+
+
+#
+# LOGGING. Example use:
+#   _bashWarn "Using this package is not recommended."
+#
+function _bashError {
+  echo
+  echo -e "  ${cred}ERROR $1 ${endc}"
+  echo
 } 
-
-
-#
-# PASS. Example use:
-#  _bashPass "Tests worked!"
-#
+function _bashWarn {
+  echo
+  echo -e "  ${cyel}WARNING $1 ${endc}"
+  echo
+} 
 function _bashPass {
   echo
   echo -e "  ${cgrn}PASS $1 ${endc}"
   echo
+}
+
+
+#
+# CHECK ERROR. Example use:
+#   _checkForError $? "That was not supposed to happen..."
+#
+function _checkForError {
+  if [ ! $1 -eq 0 ]; then _bashError "$2"; fi
 }
 
 
