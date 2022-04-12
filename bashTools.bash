@@ -87,6 +87,13 @@ function _checkPassFail {
     _bashFail "$2"
   fi
 }
+function _checkPassError {
+  if [ $1 -eq 0 ]; then
+    _bashPass "$2"
+  else
+    _bashError "$2"
+  fi
+}
 
 
 #
