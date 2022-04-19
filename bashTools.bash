@@ -188,3 +188,15 @@ function _bitFlip {
     _bashFail "_bitFlip can only take 0 or 1!"
   fi
 }
+
+
+#
+# ARE YOU SURE YOU WANT TO DO THIS? Example use:
+#   _confirmAction "Are you sure you want to do this?"
+#
+function _confirmAction {
+  read -p "$1 (Y/y to proceed.) "
+  if ! [[ $REPLY =~ [Yy]$ ]]; then
+    exit
+  fi
+}
