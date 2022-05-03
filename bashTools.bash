@@ -209,3 +209,14 @@ function _confirmAction {
 function _lookForFile {
   if [ ! -f $1 ]; then _bashFail "Missing required file "$1; fi
 }
+
+
+#
+# IS THIS PARAMETER EMPTY? Example use:
+#   _checkIfEmpty $stream
+#
+function _checkIfEmpty {
+  if [ -z "$1" ]; then
+    _bashFail "Missing required parameter!"
+  fi
+}
