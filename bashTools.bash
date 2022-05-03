@@ -200,3 +200,12 @@ function _confirmAction {
     exit
   fi
 }
+
+
+#
+# IS THIS REQUIRED FILE MISSING? Example use:
+#   _lookForFile fileName
+#
+function _lookForFile {
+  if [ ! -f $1 ]; then _bashFail "Missing required file "$1; fi
+}

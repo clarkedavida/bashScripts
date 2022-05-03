@@ -23,3 +23,11 @@ ${X%%Y*}
 ```shell
 ${X:0:2}
 ```
+
+## Delimiter m, take 2nd entry of Y, store in X
+```shell
+X=$(echo $Y | cut -dm -f2)
+```
+
+## Pad number Y with zeros until length N, store in X
+X=$(printf "%0Nd" X)
