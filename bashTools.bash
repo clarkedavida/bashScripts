@@ -212,11 +212,13 @@ function _lookForFile {
 
 
 #
-# IS THIS PARAMETER EMPTY? Example use:
-#   _checkIfEmpty $stream
+# PARAMETER HANDLING. Example use:
+#   _checkIfParamEmpty ${paramName} ${param}
 #
-function _checkIfEmpty {
-  if [ -z "$1" ]; then
-    _bashFail "Missing required parameter!"
+function _checkIfParamEmpty {
+  paramName=$1
+  param=$2
+  if [ -z ${param} ]; then
+    _bashFail "Please set "${paramName}
   fi
 }

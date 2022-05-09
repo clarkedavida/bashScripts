@@ -10,18 +10,6 @@
 
 source "${bashToolsPath}/bashTools.bash"
 
-#
-# PARAMETER HANDLING. Example use:
-#   _checkIfParamEmpty ${paramName} ${param}
-#
-function _checkIfParamEmpty {
-  paramName=$1
-  param=$2
-  if [ -z ${param} ]; then
-    _bashFail "Please set "${paramName}
-  fi
-}
-
 
 #
 # DISPLAY RUN PARAMETERS. Example use:
@@ -44,16 +32,16 @@ function _printLatticeParamsNf3 {
   _checkIfParamEmpty "Ns" ${Ns}
   _checkIfParamEmpty "Nt" ${Nt}
   _checkIfParamEmpty "beta" ${beta}
-  _checkIfParamEmpty "cm" ${cm}
-  _checkIfParamEmpty "cpre" ${cpre}
+  _checkIfParamEmpty "cm" ${m}
+  _checkIfParamEmpty "cpre" ${pre}
   _checkIfParamEmpty "msmf" ${msmf}
   echo
   echo "Running script with parameters:"
   echo "     Ns = "${Ns}
   echo "     Nt = "${Nt}
-  echo "   beta = "${beta}
-  echo "     cm = "${cm}
-  echo "   cpre = "${cpre}
+  echo "  cbeta = "${beta}
+  echo "     cm = "${m}
+  echo "   cpre = "${pre}
   echo "  ms/mf = "${msmf}
   echo
 } 

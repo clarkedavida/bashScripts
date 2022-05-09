@@ -8,7 +8,7 @@
 
 
 beta=6285
-source ${bashToolsPath}"/betaLists/nt8ms80.bash"
+source ${bashToolsPath}"/betaListsNf21/nt8ms80.bash"
 
 
 testFile="tmp"
@@ -23,5 +23,5 @@ ms: "$mse > ${testFile}
 
 
 _compareFiles ${testFile} ${controlFile}
-_checkPassFail $? "Beta list test"
+_checkPassFail $? "Nf=2+1 Beta list test."
 rm ${testFile}
