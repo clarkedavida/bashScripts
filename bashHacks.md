@@ -31,3 +31,7 @@ X=$(echo $Y | cut -dm -f2)
 
 ## Pad number Y with zeros until length N, store in X
 X=$(printf "%0Nd" X)
+
+## Sequence
+thing=$(seq 1 512)
+
