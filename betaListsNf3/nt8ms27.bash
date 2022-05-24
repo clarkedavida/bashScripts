@@ -52,16 +52,16 @@ elif [[ $beta -eq 6215 ]]; then
   pree=0.0858
 elif [[ $beta -eq 6245 ]]; then
   m=00307
-  pre=
+  pre=08289
   betae=6.245
   me=0.00307
-  pree=
+  pree=0.08289
 elif [[ $beta -eq 6285 ]]; then
   m=00293
-  pre=
+  pre=07911
   betae=6.285
   me=0.00293
-  pree=
+  pree=0.07911
 elif [[ $beta -eq 6315 ]]; then
   m=00281
   pre=07587
