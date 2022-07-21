@@ -30,8 +30,17 @@ X=$(echo $Y | cut -dm -f2)
 ```
 
 ## Pad number Y with zeros until length N, store in X
+```shell
 X=$(printf "%0Nd" X)
+```
 
 ## Sequence
+```shell
 thing=$(seq 1 512)
+```
 
+## Sort table on 1st then 2nd columns
+```shell
+sort -k1,2 table > temp
+mv temp table
+```

@@ -76,6 +76,19 @@ function _checkForFail {
 
 
 #
+# PARAMETER HANDLING. Example use:
+#   _checkIfParamEmpty ${paramName} ${param}
+#
+function _checkIfParamEmpty {
+  paramName=$1
+  param=$2
+  if [ -z ${param} ]; then
+    _bashFail "Please set ${paramName}"
+  fi
+}
+
+
+#
 # CHECK EXTENSION. Example use:
 #   _checkExtension CampaignExample.xml xml
 # Returns 0 if the extension matches.
@@ -207,18 +220,16 @@ function _confirmAction {
 #   _lookForFile fileName
 #
 function _lookForFile {
-  if [ ! -f $1 ]; then _bashFail "Missing required file "$1; fi
+  if [ ! -f $1 ]; then _bashFail "Missing required file $1"; fi
 }
 
 
 #
-# PARAMETER HANDLING. Example use:
-#   _checkIfParamEmpty ${paramName} ${param}
+# COUNT FILES MATCHING REGEX IN FOLDER. Example use:
+#   _countFilesInFolder l3216f3b6315m00281m07587 "*.check"
 #
-function _checkIfParamEmpty {
-  paramName=$1
-  param=$2
-  if [ -z ${param} ]; then
-    _bashFail "Please set "${paramName}
-  fi
+function _countFilesInFolder {
+  _checkIfParamEmpty "folder name and regular expression" $1
+  _checkIfParamEmpty "folder name and regular expression" $2
+  find $1 -type f -name $2 | wc -l
 }
