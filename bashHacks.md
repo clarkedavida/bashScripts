@@ -44,3 +44,8 @@ thing=$(seq 1 512)
 sort -k1,2 table > temp
 mv temp table
 ```
+
+## Add text to end of line that begins with PYTHONPATH
+```shell 
+sed -ie 's/^PYTHONPATH*$/& ADDing MORE TEXT TO THE END/g' file
+```
