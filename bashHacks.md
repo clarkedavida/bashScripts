@@ -49,3 +49,9 @@ mv temp table
 ```shell 
 sed -ie 's/^PYTHONPATH*$/& ADDing MORE TEXT TO THE END/g' file
 ```
+
+## List human readable, time-ordered, hidden files
+```shell 
+ls -haltr
+```
+
