@@ -24,6 +24,11 @@ ${X%%Y*}
 ${X:0:2}
 ```
 
+## Capture output of a script
+```shell
+OUTPUT=$(SCRIPT TO RUN)
+```
+
 ## Delimiter m, take 2nd entry of Y, store in X
 ```shell
 X=$(echo $Y | cut -dm -f2)
@@ -37,6 +42,13 @@ X=$(printf "%0Nd" X)
 ## Sequence
 ```shell
 thing=$(seq 1 512)
+```
+
+## Loop over elements of array
+```shell
+for i in "${arrayName[@]}"; do
+   ...
+done
 ```
 
 ## Sort table on 1st then 2nd columns
