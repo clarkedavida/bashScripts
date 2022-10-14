@@ -44,6 +44,13 @@ X=$(printf "%0Nd" X)
 thing=$(seq 1 512)
 ```
 
+## Loop over elements of array
+```shell
+for i in "${arrayName[@]}"; do
+   ...
+done
+```
+
 ## Sort table on 1st then 2nd columns
 ```shell
 sort -k1,2 table > temp
