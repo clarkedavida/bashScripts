@@ -9,7 +9,7 @@
 # on various clusters. 
 # 
 
-source env.sh
+source env.bash
 
 # pushd and popd are ways of changing directories that involve a
 # directory stack. it can be convenient, but it's not really utilized here it seems.

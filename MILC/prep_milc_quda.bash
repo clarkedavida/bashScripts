@@ -1,10 +1,24 @@
 #! /bin/bash
 
-source env.sh
+# 
+# prep_milc_quda.bash                                                               
+# 
+# D. Clarke 
+#
+# Auxiliary script to help reorganize the QUDA folder so that
+# everything chan be found by build_milc_quda.bash. 
+# 
 
-echo "Grabbing MILC branch..."
+source env.bash
+
+echo "Updating MILC git..."
+
 if [ ! -d milc_qcd ]; then
   git clone --branch develop https://github.com/milc-qcd/milc_qcd/
+else
+  cd milc_qcd
+  git pull
+  cd ..
 fi
 
 echo
