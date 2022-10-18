@@ -9,19 +9,14 @@
 # on various clusters. 
 # 
 
-source env.bash
-
-# pushd and popd are ways of changing directories that involve a
-# directory stack. it can be convenient, but it's not really utilized here it seems.
-pushd quda
+source "${bashToolsPath}/MILC/env.bash"
 
 QUDA_HOME=$(pwd)
 #BRANCH_NAME=develop
 BRANCH_NAME=feature/staggered_correlators_gk
 
 
-if [ -d quda ]
-then
+if [ -d quda ]; then
   cd quda
   git pull
   git checkout ${BRANCH_NAME}
@@ -30,19 +25,25 @@ else
   cd quda
   git checkout ${BRANCH_NAME}
 fi
-cd ..
 
-mkdir -p build && cd build
+mkdir -p build
+cd build
+
+if [ ${CLUSTER} == 'crusher' ]; then
+  cpp_comp=CC
+  c_comp=cc
+elif [ ${CLUSTER} == 'jlse' ]; then
+  cpp_comp=gcc
+  c_comp=gcc
+else
+  _bashFail "Unrecognized cluster ${CLUSTER}."
+fi
 
 cmake \
     -DCMAKE_BUILD_TYPE=RELEASE \
-    -DCMAKE_CXX_COMPILER=CC \
-    -DCMAKE_CXX_FLAGS="--offload-arch=gfx90a" \
-    -DCMAKE_C_COMPILER=cc \
-    -DCMAKE_C_FLAGS="--offload-arch=gfx90a" \
+    -DCMAKE_CXX_COMPILER=${cpp_comp} \
+    -DCMAKE_C_COMPILER=${c_comp} \
     -DCMAKE_C_STANDARD=99 \
-    -DCMAKE_EXE_LINKER_FLAGS="--offload-arch=gfx90a" \
-    -DCMAKE_HIP_FLAGS="--offload-arch=gfx90a" \
     -DCMAKE_INSTALL_PREFIX=${QUDA_HOME}/install \
     -DQUDA_BUILD_SHAREDLIB=ON \
     -DQUDA_DIRAC_DEFAULT_OFF=ON \
@@ -56,7 +57,9 @@ cmake \
     ${QUDA_HOME}/quda
 
 
-# -DCMAKE_SHARED_LINKER_FLAGS="—-offload-arch=gfx90a" \
+
+exit
+
 
 make -j16
 
