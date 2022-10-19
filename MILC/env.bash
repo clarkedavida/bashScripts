@@ -14,7 +14,7 @@ source "${bashToolsPath}/bashTools.bash"
 # Set cluster name here. Possibilities include:
 #   crusher, jlse
 #
-export CLUSTER=jlse
+export CLUSTER=crusher
 
 if [ ${CLUSTER} == 'crusher' ]; then
 
@@ -36,6 +36,7 @@ if [ ${CLUSTER} == 'crusher' ]; then
 
 elif [ ${CLUSTER} == 'jlse' ]; then
 
+  # this needs to be hidden i think
   module use /soft/modulefiles
 # module swap PrgEnv-cray PrgEnv-amd
 #  module load craype-accel-amd-gfx90a
