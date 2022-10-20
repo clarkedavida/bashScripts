@@ -50,6 +50,7 @@ if [ ${CLUSTER} == 'crusher' ]; then
     -DQUDA_DIRAC_STAGGERED=ON \
     -DQUDA_DOWNLOAD_USQCD=ON \
     -DQUDA_GPU_ARCH=gfx90a \
+    -DQUDA_CONTRACT=ON \ 
     -DQUDA_QIO=ON \
     -DQUDA_QMP=ON \
     -DQUDA_TARGET_TYPE=HIP \
@@ -89,7 +90,8 @@ if [ ! $? -eq 0 ]; then
   mkdir -p ${INSTALLROOT}
 else
   echo "QUDA successfully installed."
-  mv ${QUDA_HOME}/install ${QUDA_HOME}/quda/.
+  if [ -d ${INSTALLROOT} ]; then
+  cp -r ${QUDA_HOME}/install ${QUDA_HOME}/quda/.
 fi 
 
 
