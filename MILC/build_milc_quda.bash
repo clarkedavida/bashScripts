@@ -15,18 +15,6 @@ QUDA_INSTALL=${INSTALLROOT}/quda
 LIBQUDA="-Wl,-rpath ${QUDA_INSTALL}/lib -L${QUDA_INSTALL}/lib -lquda -D__gfx90a --amdgpu-target=gfx90a -Wl,-rpath=${ROCM_PATH}/hiprand/lib -L${ROCM_PATH}/hiprand/lib -Wl,-rpath=${ROCM_PATH}/rocfft/lib -L${ROCM_PATH}/rocfft/lib -lhiprand -lrocfft -Wl,-rpath=${ROCM_PATH}/hipblas/lib -L${ROCM_PATH}/hipblas/lib -lhipblas -Wl,-rpath=${ROCM_PATH}/rocblas/lib -L${ROCM_PATH}/rocblas/lib -lrocblas -Wl,-rpath=${ROCM_PATH}/hip/lib"
 
 
-
-echo
-echo "Prepping quda/install folder for MILC..."
-mkdir -p ${INSTALLROOT}/quda
-mkdir -p ${INSTALLROOT}/qio/lib
-mkdir -p ${INSTALLROOT}/qio/include
-mkdir -p ${INSTALLROOT}/qio/other_libs
-mkdir -p ${INSTALLROOT}/qmp/lib
-mkdir -p ${INSTALLROOT}/qmp/include
-
-
-
 if [ ! -d milc_qcd ]; then
   echo "Cloning MILC git..."
   git clone --branch develop https://github.com/milc-qcd/milc_qcd/
