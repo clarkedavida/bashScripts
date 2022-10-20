@@ -40,95 +40,36 @@ cp -r  build/_deps/qmp-src/include/* install/qmp/include/.
 cd ..
 
 
-
-############ Make ks_spectrum_hisq ##################
+EXECUTABLE=ks_spectrum_hisq
 echo
 echo
-echo "Making ks_spectrum"
+echo "Making ${EXECUTABLE}"
 echo
 echo
-
 cd milc_qcd/ks_spectrum
 cp ../Makefile .
 make clean
-
-MY_CC=hipcc \
-MY_CXX=hipcc \
-ARCH="" \
-COMPILER="gnu" \
-OPT="-O3 -Ofast" \
-PATH_TO_NVHPCSDK="" \
-CUDA_HOME="" \
-QUDA_HOME=${QUDA_INSTALL} \
-WANTQUDA=true \
-WANT_FN_CG_GPU=true \
-WANT_FL_GPU=true \
-WANT_GF_GPU=true \
-WANT_FF_GPU=true \
-WANT_MIXED_PRECISION_GPU=2 \
-PRECISION=2 \
-MPP=true \
-OMP=true \
-WANTQIO=true \
-WANTQMP=true \
-QIOPAR=${INSTALLROOT}/qio \
-QMPPAR=${INSTALLROOT}/qmp \
-LIBQUDA=${LIBQUDA} \
-CGEOM="-DFIX_NODE_GEOM -DFIX_IONODE_GEOM" \
-KSCGMULTI="-DKS_MULTICG=HYBRID -DMULTISOURCE -DMULTIGRID" \
-CTIME="-DNERSC_TIME -DCGTIME -DFFTIME -DFLTIME -DGFTIME -DREMAP -DPRTIME -DIOTIME" \
-OFFLOAD=HIP \
-WANT_KS_CONT_GPU=true \
-WANT_SHIFT_GPU=true \
-WANT_SPIN_TASTE_GPU=true \
-WANT_GAUGEFIX_OVR_GPU=true \
-make -j 1 ks_spectrum_hisq
+bash -x "${bashToolsPath}/MILC/make_${EXECUTABLE}.bash" 2> ${EXECUTABLE}.err
+python3 "${bashToolsPath}/MILC/getOptAndErr.py" ${EXECUTABLE}
+rm ${EXECUTABLE}.err
 cd ..
 
 
-############ Make su3_rhmd_hisq ##################
+EXECUTABLE=su3_rhmd_hisq
 echo
 echo
-echo "Making su3_rhmd_hisq"
+echo "Making ${EXECUTABLE}"
 echo
 echo
 cd ks_imp_rhmc
 cp ../Makefile .
 make clean
-
-MY_CC=hipcc \
-MY_CXX=hipcc \
-ARCH="" \
-COMPILER="gnu" \
-OPT="-O3 -Ofast" \
-PATH_TO_NVHPCSDK="" \
-CUDA_HOME="" \
-QUDA_HOME=${QUDA_INSTALL} \
-WANTQUDA=true \
-WANT_FN_CG_GPU=true \
-WANT_FL_GPU=true \
-WANT_GF_GPU=true \
-WANT_FF_GPU=true \
-WANT_MIXED_PRECISION_GPU=2 \
-PRECISION=1 \
-MPP=true \
-OMP=true \
-WANTQIO=true \
-WANTQMP=true \
-QIOPAR=${INSTALLROOT}/qio \
-QMPPAR=${INSTALLROOT}/qmp \
-LIBQUDA=${LIBQUDA} \
-CGEOM="-DFIX_NODE_GEOM -DFIX_IONODE_GEOM" \
-KSCGMULTI="-DKS_MULTICG=HYBRID -DMULTISOURCE -DMULTIGRID" \
-CTIME="-DNERSC_TIME -DCGTIME -DFFTIME -DFLTIME -DGFTIME -DREMAP -DPRTIME -DIOTIME" \
-OFFLOAD=HIP \
-WANT_KS_CONT_GPU=true \
-WANT_SHIFT_GPU=true \
-WANT_SPIN_TASTE_GPU=true \
-WANT_GAUGEFIX_OVR_GPU=true \
-make -j 1 su3_rhmd_hisq
+bash -x "${bashToolsPath}/MILC/make_${EXECUTABLE}.bash" 2> ${EXECUTABLE}.err
+python3 "${bashToolsPath}/MILC/getOptAndErr.py" ${EXECUTABLE}
+rm ${EXECUTABLE}.err
 cd ../..
+
 
 echo
 echo "moving executable to kpp_spectrum"
-mv /ccs/home/dclarke/crusher/milc_qcd/ks_spectrum/ks_spectrum_hisq /ccs/home/dclarke/crusher/kpp_spectrum/l3248f211b580m002426m06730m8447/.
+mv /ccs/home/dclarke/crusher/milc_qcd/ks_spectrum/ks_spectrum_hisq* /ccs/home/dclarke/crusher/kpp_spectrum/l3248f211b580m002426m06730m8447/.
