@@ -41,7 +41,7 @@ X=$(printf "%0Nd" X)
 
 ## Sequence
 ```shell
-thing=$(seq 1 512)
+thing=($(seq 1 512))
 ```
 
 ## Loop over elements of array
@@ -57,7 +57,7 @@ sort -k1,2 table > temp
 mv temp table
 ```
 
-## Add text to end of line that begins with PYTHONPATH
+## Add text to end of the line that begins with PYTHONPATH
 ```shell 
 sed -ie 's/^PYTHONPATH*$/& ADDing MORE TEXT TO THE END/g' file
 ```
@@ -67,3 +67,7 @@ sed -ie 's/^PYTHONPATH*$/& ADDing MORE TEXT TO THE END/g' file
 ls -haltr
 ```
 
+## Recursive rsync, A into B, verbose, keep time stamps and permissions, etc.
+```shell
+rsync -av A B
+```
