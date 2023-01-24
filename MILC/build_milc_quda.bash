@@ -46,7 +46,7 @@ cp -r  ${QUDA_BUILD}/_deps/qmp-src/include/* ${INSTALLROOT}/qmp/include/.
 
 
 # BRANCH        DATE OF LAST COMPILATION 
-# develop       23 Jan 2023
+# develop       24 Jan 2023
 if [ ${CLUSTER} == 'crusher' ]; then
 
   export CLUSTER_CC=hipcc
