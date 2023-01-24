@@ -14,7 +14,7 @@ source "${bashToolsPath}/bashTools.bash"
 # Set cluster name here. Possibilities include:
 #   crusher, jlse, sunspot
 #
-export CLUSTER=sunspot
+export CLUSTER=crusher
 
 
 _bashInfo "Loading modules for cluster ${CLUSTER}"

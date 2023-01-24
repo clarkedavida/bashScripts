@@ -11,8 +11,6 @@
 source "${bashToolsPath}/MILC/env.bash"
 
 
-
-
 BRANCH_NAME=develop
 
 
@@ -43,7 +41,6 @@ cp -r  ${QUDA_BUILD}/_deps/qmp-build/lib/* ${INSTALLROOT}/qmp/lib/.
 cp -r  ${QUDA_BUILD}/_deps/qmp-src/include/* ${INSTALLROOT}/qmp/include/.
 
 
-
 # BRANCH        DATE OF LAST COMPILATION 
 # develop       24 Jan 2023
 if [ ${CLUSTER} == 'crusher' ]; then
@@ -71,10 +68,9 @@ elif [ ${CLUSTER} == 'jlse' ]; then
 
 
 # BRANCH        DATE OF LAST COMPILATION
-# develop
+# develop       24 Jan 2023
 elif [ ${CLUSTER} == 'sunspot' ]; then
 
-  # PATH_TO_NVHPCSDK="" ? 
   export CLUSTER_CC=mpicc
   export CLUSTER_CXX=mpicxx
   export CLUSTER_OFFLOAD=SYCL

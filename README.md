@@ -22,3 +22,6 @@ This adds a global variable `bashToolsPath` to your `.bashrc`, along
 with a few aliases for convenience scripts.  You may need to
 restart your terminal for the bashScripts to work. Try navigating to the `tests`
 folder and running `runTests.bash` to see if everything worked.
+
+## Ackowledgements
+Special thanks to C. DeTar for helping me get the interfacing with MILC to work.
