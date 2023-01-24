@@ -11,7 +11,6 @@
 source "${bashToolsPath}/MILC/env.bash"
 
 
-LIBQUDA="-Wl,-rpath ${QUDA_INSTALL}/lib -L${QUDA_INSTALL}/lib -lquda -D__gfx90a --amdgpu-target=gfx90a -Wl,-rpath=${ROCM_PATH}/hiprand/lib -L${ROCM_PATH}/hiprand/lib -Wl,-rpath=${ROCM_PATH}/rocfft/lib -L${ROCM_PATH}/rocfft/lib -lhiprand -lrocfft -Wl,-rpath=${ROCM_PATH}/hipblas/lib -L${ROCM_PATH}/hipblas/lib -lhipblas -Wl,-rpath=${ROCM_PATH}/rocblas/lib -L${ROCM_PATH}/rocblas/lib -lrocblas -Wl,-rpath=${ROCM_PATH}/hip/lib"
 
 
 BRANCH_NAME=develop
@@ -52,6 +51,10 @@ if [ ${CLUSTER} == 'crusher' ]; then
   export CLUSTER_CC=hipcc
   export CLUSTER_CXX=hipcc
   export CLUSTER_OFFLOAD=HIP
+  export CLUSTER_GPU_ARCH=""
+  export CLUSTER_COMPILER="gnu"
+  export CLUSTER_LDFLAGS=""
+  export CLUSTER_LIBQUDA="-Wl,-rpath ${QUDA_INSTALL}/lib -L${QUDA_INSTALL}/lib -lquda -D__gfx90a --amdgpu-target=gfx90a -Wl,-rpath=${ROCM_PATH}/hiprand/lib -L${ROCM_PATH}/hiprand/lib -Wl,-rpath=${ROCM_PATH}/rocfft/lib -L${ROCM_PATH}/rocfft/lib -lhiprand -lrocfft -Wl,-rpath=${ROCM_PATH}/hipblas/lib -L${ROCM_PATH}/hipblas/lib -lhipblas -Wl,-rpath=${ROCM_PATH}/rocblas/lib -L${ROCM_PATH}/rocblas/lib -lrocblas -Wl,-rpath=${ROCM_PATH}/hip/lib"
 
 
 # BRANCH        DATE OF LAST COMPILATION
@@ -61,15 +64,26 @@ elif [ ${CLUSTER} == 'jlse' ]; then
   export CLUSTER_CC=hipcc
   export CLUSTER_CXX=hipcc
   export CLUSTER_OFFLOAD=HIP
+  export CLUSTER_GPU_ARCH="intel"
+  export CLUSTER_COMPILER="gnu"
+  export CLUSTER_LDFLAGS=""
+  export CLUSTER_LIBQUDA="-Wl,-rpath ${QUDA_INSTALL}/lib -L${QUDA_INSTALL}/lib -lquda -D__gfx90a --amdgpu-target=gfx90a -Wl,-rpath=${ROCM_PATH}/hiprand/lib -L${ROCM_PATH}/hiprand/lib -Wl,-rpath=${ROCM_PATH}/rocfft/lib -L${ROCM_PATH}/rocfft/lib -lhiprand -lrocfft -Wl,-rpath=${ROCM_PATH}/hipblas/lib -L${ROCM_PATH}/hipblas/lib -lhipblas -Wl,-rpath=${ROCM_PATH}/rocblas/lib -L${ROCM_PATH}/rocblas/lib -lrocblas -Wl,-rpath=${ROCM_PATH}/hip/lib"
 
 
 # BRANCH        DATE OF LAST COMPILATION
 # develop
 elif [ ${CLUSTER} == 'sunspot' ]; then
 
-  export CLUSTER_CC=hipcc
-  export CLUSTER_CXX=hipcc
-  export CLUSTER_OFFLOAD=HIP
+  # PATH_TO_NVHPCSDK="" ? 
+  export CLUSTER_CC=mpicc
+  export CLUSTER_CXX=mpicxx
+  export CLUSTER_OFFLOAD=SYCL
+  export CLUSTER_GPU_ARCH=""
+  export CLUSTER_COMPILER="intel"
+
+  export mkl="-lmkl_sycl -lmkl_intel_ilp64 -lmkl_core -lmkl_tbb_thread"
+  export CLUSTER_LDFLAGS="-fsycl -fopenmp -fsycl-device-code-split=per_kernel ${mkl}"
+  export CLUSTER_LIBQUDA="-Wl,-rpath ${QUDA_INSTALL}/lib -L${QUDA_INSTALL}/lib -lquda"
 
 
 fi
