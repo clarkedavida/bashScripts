@@ -12,11 +12,13 @@ source "${bashToolsPath}/bashTools.bash"
 
 #
 # Set cluster name here. Possibilities include:
-#   crusher, jlse
+#   crusher, jlse, sunspot
 #
-export CLUSTER=crusher
+export CLUSTER=sunspot
+
 
 _bashInfo "Loading modules for cluster ${CLUSTER}"
+
 
 if [ ${CLUSTER} == 'crusher' ]; then
 
@@ -33,7 +35,6 @@ if [ ${CLUSTER} == 'crusher' ]; then
   export GTL_ROOT=/opt/cray/pe/mpich/8.1.16/gtl/lib
   export MPICH_DIR=${MPICH_ROOT}/ofi/rocm-compiler/5.0
   
-  
 
 elif [ ${CLUSTER} == 'jlse' ]; then
 
@@ -45,6 +46,14 @@ elif [ ${CLUSTER} == 'jlse' ]; then
   module load cmake
   module load rocm
   module load gcc 
+
+
+elif [ ${CLUSTER} == 'sunspot' ]; then
+
+  module swap oneapi
+  module load spack
+  module load cmake
+
 
 else
   _bashFail "Unrecognized cluster ${CLUSTER}."

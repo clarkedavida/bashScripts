@@ -14,8 +14,9 @@
 source "${bashToolsPath}/MILC/env.bash"
 
 
-BRANCH_NAME=develop
+#BRANCH_NAME=develop
 #BRANCH_NAME=feature/staggered_correlators_gk
+BRANCH_NAME=feature/sycl
 
 
 _bashInfo "Working with QUDA_SRC = ${QUDA_SRC}"
@@ -50,7 +51,7 @@ cd ${QUDA_BUILD}
 
 
 # BRANCH	DATE OF LAST COMPILATION 
-# develop
+# develop       23 Jan 2023
 if [ ${CLUSTER} == 'crusher' ]; then
 
   cmake \
@@ -83,6 +84,27 @@ elif [ ${CLUSTER} == 'jlse' ]; then
 
   cmake \
 -DCMAKE_BUILD_TYPE=RELEASE \
+-DCMAKE_INSTALL_PREFIX=${QUDA_INSTALL} \
+-DQUDA_BUILD_SHAREDLIB=ON \
+-DQUDA_DIRAC_DEFAULT_OFF=ON \
+-DQUDA_DIRAC_STAGGERED=ON \
+-DQUDA_DOWNLOAD_USQCD=ON \
+-DQUDA_QIO=ON \
+-DQUDA_QMP=ON \
+-DQUDA_TARGET_TYPE=SYCL \
+${QUDA_SRC}
+
+  _checkForFail $? "cmake QUDA"
+
+
+# BRANCH	DATE OF LAST COMPILATION
+# develop       23 Jan 2023
+elif [ ${CLUSTER} == 'sunspot' ]; then
+
+  cmake \
+-DCMAKE_BUILD_TYPE=RELEASE \
+-DCMAKE_CXX_COMPILER=${CXX} \
+-DCMAKE_C_COMPILER=${CC} \
 -DCMAKE_INSTALL_PREFIX=${QUDA_INSTALL} \
 -DQUDA_BUILD_SHAREDLIB=ON \
 -DQUDA_DIRAC_DEFAULT_OFF=ON \
