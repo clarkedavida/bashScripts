@@ -12,11 +12,11 @@ source "${bashToolsPath}/MILC/env.bash"
 LIBQUDA="-Wl,-rpath ${QUDA_INSTALL}/lib -L${QUDA_INSTALL}/lib -lquda -D__gfx90a --amdgpu-target=gfx90a -Wl,-rpath=${ROCM_PATH}/hiprand/lib -L${ROCM_PATH}/hiprand/lib -Wl,-rpath=${ROCM_PATH}/rocfft/lib -L${ROCM_PATH}/rocfft/lib -lhiprand -lrocfft -Wl,-rpath=${ROCM_PATH}/hipblas/lib -L${ROCM_PATH}/hipblas/lib -lhipblas -Wl,-rpath=${ROCM_PATH}/rocblas/lib -L${ROCM_PATH}/rocblas/lib -lrocblas -Wl,-rpath=${ROCM_PATH}/hip/lib"
 
 
-MY_CC=hipcc \
-MY_CXX=hipcc \
+MY_CC=${CLUSTER_CC} \
+MY_CXX=${CLUSTER_CXX} \
 ARCH="" \
 COMPILER="gnu" \
-OFFLOAD="HIP" \
+OFFLOAD=${CLUSTER_OFFLOAD} \
 OPT="-O3 -Ofast" \
 PATH_TO_NVHPCSDK="" \
 CUDA_HOME="" \

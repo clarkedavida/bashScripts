@@ -14,13 +14,17 @@ source "${bashToolsPath}/MILC/env.bash"
 LIBQUDA="-Wl,-rpath ${QUDA_INSTALL}/lib -L${QUDA_INSTALL}/lib -lquda -D__gfx90a --amdgpu-target=gfx90a -Wl,-rpath=${ROCM_PATH}/hiprand/lib -L${ROCM_PATH}/hiprand/lib -Wl,-rpath=${ROCM_PATH}/rocfft/lib -L${ROCM_PATH}/rocfft/lib -lhiprand -lrocfft -Wl,-rpath=${ROCM_PATH}/hipblas/lib -L${ROCM_PATH}/hipblas/lib -lhipblas -Wl,-rpath=${ROCM_PATH}/rocblas/lib -L${ROCM_PATH}/rocblas/lib -lrocblas -Wl,-rpath=${ROCM_PATH}/hip/lib"
 
 
+BRANCH_NAME=develop
+
+
 if [ ! -d milc_qcd ]; then
   echo "Cloning MILC git..."
-  git clone --branch develop https://github.com/milc-qcd/milc_qcd/
+  git clone --branch ${BRANCH_NAME} https://github.com/milc-qcd/milc_qcd/
 else
   cd milc_qcd
   echo "Updating MILC git..."
   git pull
+  git checkout ${BRANCH_NAME}
   cd ..
 fi
 
@@ -40,9 +44,38 @@ cp -r  ${QUDA_BUILD}/_deps/qmp-build/lib/* ${INSTALLROOT}/qmp/lib/.
 cp -r  ${QUDA_BUILD}/_deps/qmp-src/include/* ${INSTALLROOT}/qmp/include/.
 
 
+
+# BRANCH        DATE OF LAST COMPILATION 
+# develop       23 Jan 2023
+if [ ${CLUSTER} == 'crusher' ]; then
+
+  export CLUSTER_CC=hipcc
+  export CLUSTER_CXX=hipcc
+  export CLUSTER_OFFLOAD=HIP
+
+
+# BRANCH        DATE OF LAST COMPILATION
+# develop
+elif [ ${CLUSTER} == 'jlse' ]; then
+
+  export CLUSTER_CC=hipcc
+  export CLUSTER_CXX=hipcc
+  export CLUSTER_OFFLOAD=HIP
+
+
+# BRANCH        DATE OF LAST COMPILATION
+# develop
+elif [ ${CLUSTER} == 'sunspot' ]; then
+
+  export CLUSTER_CC=hipcc
+  export CLUSTER_CXX=hipcc
+  export CLUSTER_OFFLOAD=HIP
+
+
+fi
+
+
 EXECUTABLE=ks_spectrum_hisq
-
-
 _bashInfo "Making ${EXECUTABLE}"
 cd milc_qcd/ks_spectrum
 cp ../Makefile .
