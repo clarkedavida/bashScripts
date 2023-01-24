@@ -10,11 +10,48 @@
 
 source "${bashToolsPath}/bashTools.bash"
 
-BUILDFOLDER='buildSIMULATeQCD'
+export BUILDFOLDER=buildSIMULATeQCD
+export GITLFSFOLDER=${HOME}/git-lfs
 
-# cuda or amd
-GPUMAKE='cuda'
+#
+# Tested cluster	Date of last known compilation
+#
+# bielefeld		2023 Jan 10
+# crusher		2023 Jan 10
+# lumi-G		2023 Jan 10
+#
+export CLUSTER=crusher
 
-# pascal: 60
-# volta: 70
-GPUARCH=60
+if [ ${CLUSTER} == 'crusher' ]; then
+
+  module load PrgEnv-amd
+  module load craype-accel-amd-gfx90a
+  module load cray-mpich
+  module load cmake
+  module load rocm
+  module unload cray-libsci
+  export CXX=hipcc
+  export GPUMAKE=hip
+  export GPUARCH=gfx90a
+
+elif [ ${CLUSTER} == 'bielefeld' ]; then
+
+  export GPUMAKE=cuda
+  export GPUARCH=70
+
+elif [ ${CLUSTER} == 'lumig' ]; then
+
+  export MPICH_GPU_SUPPORT_ENABLED=1
+  module load CrayEnv
+  module load buildtools/22.08
+  module load craype-accel-amd-gfx90a
+  module load cray-mpich
+  module load rocm
+  export CXX=hipcc
+  export HIP_PATH=${ROCM_PATH}/hip
+  export GPUMAKE=hip
+  export GPUARCH=gfx90a
+
+else
+  _bashFail "Unrecognized cluster ${CLUSTER}."
+fi

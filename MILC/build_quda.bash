@@ -6,15 +6,30 @@
 # C. DeTar, D. Clarke 
 # 
 # A setup script that gets QUDA running and prepares it for MILC compilation
-# on various clusters. 
+# on various clusters. The goal is that everything gets installed in the $HOME
+# directory.
 # 
+
 
 source "${bashToolsPath}/MILC/env.bash"
 
-QUDA_HOME=$(pwd)
-#BRANCH_NAME=develop
-BRANCH_NAME=feature/staggered_correlators_gk
 
+BRANCH_NAME=develop
+#BRANCH_NAME=feature/staggered_correlators_gk
+
+
+_bashInfo "Working with QUDA_SRC = ${QUDA_SRC}"
+
+
+if [ ${BRANCH_NAME} == 'feature/staggered_correlators_gk' ]; then
+  _bashWarn "As of 23 Jan 2023, this branch is not ready for use with HIP!"
+fi
+
+
+#
+# Note: If you try to switch branches when you already have some QUDA folder, things
+# may not work. I advise you just redownload the branch from the beginning.
+#
 if [ -d quda ]; then
   cd quda
   git pull
@@ -25,55 +40,60 @@ else
   git checkout ${BRANCH_NAME}
 fi
 
-mkdir -p build
-cd build
 
+_checkForFail $? "Clone or update QUDA git"
+
+
+cd ${HOME}
+mkdir -p ${QUDA_BUILD} 
+cd ${QUDA_BUILD} 
 
 
 # BRANCH	DATE OF LAST COMPILATION 
 # develop
-# staggered_gk  19 Oct 2022
 if [ ${CLUSTER} == 'crusher' ]; then
 
   cmake \
-    -DCMAKE_BUILD_TYPE=RELEASE \
-    -DCMAKE_CXX_COMPILER=CC \
-    -DCMAKE_CXX_FLAGS="--offload-arch=gfx90a" \
-    -DCMAKE_C_COMPILER=cc \
-    -DCMAKE_C_FLAGS="--offload-arch=gfx90a" \
-    -DCMAKE_C_STANDARD=99 \
-    -DCMAKE_EXE_LINKER_FLAGS="--offload-arch=gfx90a" \
-    -DCMAKE_HIP_FLAGS="--offload-arch=gfx90a" \
-    -DCMAKE_INSTALL_PREFIX=${QUDA_HOME}/install \
-    -DQUDA_BUILD_SHAREDLIB=ON \
-    -DQUDA_DIRAC_DEFAULT_OFF=ON \
-    -DQUDA_DIRAC_STAGGERED=ON \
-    -DQUDA_DOWNLOAD_USQCD=ON \
-    -DQUDA_GPU_ARCH=gfx90a \
-    -DQUDA_CONTRACT=ON \ 
-    -DQUDA_QIO=ON \
-    -DQUDA_QMP=ON \
-    -DQUDA_TARGET_TYPE=HIP \
-    -DROCM_PATH=${ROCM_PATH} \
-    ${QUDA_HOME}/quda
+-DCMAKE_BUILD_TYPE=RELEASE \
+-DCMAKE_CXX_COMPILER=CC \
+-DCMAKE_CXX_FLAGS="--offload-arch=gfx90a" \
+-DCMAKE_C_COMPILER=cc \
+-DCMAKE_C_FLAGS="--offload-arch=gfx90a" \
+-DCMAKE_C_STANDARD=99 \
+-DCMAKE_EXE_LINKER_FLAGS="--offload-arch=gfx90a" \
+-DCMAKE_HIP_FLAGS="--offload-arch=gfx90a" \
+-DCMAKE_INSTALL_PREFIX=${QUDA_INSTALL} \
+-DQUDA_BUILD_SHAREDLIB=ON \
+-DQUDA_DIRAC_DEFAULT_OFF=ON \
+-DQUDA_DIRAC_STAGGERED=ON \
+-DQUDA_DOWNLOAD_USQCD=ON \
+-DQUDA_GPU_ARCH=${TARGET_GPU} \
+-DQUDA_QIO=ON \
+-DQUDA_QMP=ON \
+-DQUDA_TARGET_TYPE=HIP \
+-DROCM_PATH=${ROCM_PATH} \
+${QUDA_SRC}
+
+  _checkForFail $? "cmake QUDA"
 
 
 # BRANCH	DATE OF LAST COMPILATION
 # develop
-# staggered_gk
 elif [ ${CLUSTER} == 'jlse' ]; then
 
   cmake \
-    -DCMAKE_BUILD_TYPE=RELEASE \
-    -DCMAKE_INSTALL_PREFIX=${QUDA_HOME}/install \
-    -DQUDA_BUILD_SHAREDLIB=ON \
-    -DQUDA_DIRAC_DEFAULT_OFF=ON \
-    -DQUDA_DIRAC_STAGGERED=ON \
-    -DQUDA_DOWNLOAD_USQCD=ON \
-    -DQUDA_QIO=ON \
-    -DQUDA_QMP=ON \
-    -DQUDA_TARGET_TYPE=SYCL \
-    ${QUDA_HOME}/quda
+-DCMAKE_BUILD_TYPE=RELEASE \
+-DCMAKE_INSTALL_PREFIX=${QUDA_INSTALL} \
+-DQUDA_BUILD_SHAREDLIB=ON \
+-DQUDA_DIRAC_DEFAULT_OFF=ON \
+-DQUDA_DIRAC_STAGGERED=ON \
+-DQUDA_DOWNLOAD_USQCD=ON \
+-DQUDA_QIO=ON \
+-DQUDA_QMP=ON \
+-DQUDA_TARGET_TYPE=SYCL \
+${QUDA_SRC}
+
+  _checkForFail $? "cmake QUDA"
 
 
 else
@@ -81,26 +101,7 @@ else
 fi
 
 
-
 # For now this just flashes a message, but one could use this in the future
 # to move things around in case only a partial install completes.
 make -j16 install
-if [ ! $? -eq 0 ]; then
-  _bashError "QUDA install did not complete..."
-  mkdir -p ${INSTALLROOT}
-else
-  echo "QUDA successfully installed."
-  if [ -d ${INSTALLROOT} ]; then
-  cp -r ${QUDA_HOME}/install ${QUDA_HOME}/quda/.
-fi 
-
-
-echo
-echo "Prepping quda/install folder for MILC..."
-mkdir -p ${INSTALLROOT}/quda
-mkdir -p ${INSTALLROOT}/qio/lib
-mkdir -p ${INSTALLROOT}/qio/include
-mkdir -p ${INSTALLROOT}/qio/other_libs
-mkdir -p ${INSTALLROOT}/qmp/lib
-mkdir -p ${INSTALLROOT}/qmp/include
-
+_checkForFail $? "install QUDA"

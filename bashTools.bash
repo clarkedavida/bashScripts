@@ -30,7 +30,7 @@ cwhi="\e[97m"
 #
 function _bashFail {
   echo
-  echo -e "  ${cred}FAIL $1 ${endc}"
+  echo -e "  ${cred}FAIL: $1 ${endc}"
   echo
   exit
 }
@@ -42,17 +42,22 @@ function _bashFail {
 #
 function _bashError {
   echo
-  echo -e "  ${cred}ERROR $1 ${endc}"
+  echo -e "  ${cred}ERROR: $1 ${endc}"
   echo
 } 
 function _bashWarn {
   echo
-  echo -e "  ${cyel}WARNING $1 ${endc}"
+  echo -e "  ${cyel}WARNING: $1 ${endc}"
   echo
 } 
 function _bashPass {
   echo
-  echo -e "  ${cgrn}PASS $1 ${endc}"
+  echo -e "  ${cgrn}SUCCESS: $1 ${endc}"
+  echo
+}
+function _bashInfo {
+  echo
+  echo -e "  ${ccyn}INFO: $1 ${endc}"
   echo
 }
 
@@ -71,7 +76,11 @@ function _checkForError {
 #   _checkForFail $? "Something went wrong."
 #
 function _checkForFail {
-  if [ ! $1 -eq 0 ]; then _bashFail "$2"; fi
+  if [ ! $1 -eq 0 ]; then 
+    _bashFail "$2"
+  else
+    _bashPass "$2"
+  fi
 }
 
 

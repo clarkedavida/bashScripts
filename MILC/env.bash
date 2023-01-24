@@ -16,6 +16,8 @@ source "${bashToolsPath}/bashTools.bash"
 #
 export CLUSTER=crusher
 
+_bashInfo "Loading modules for cluster ${CLUSTER}"
+
 if [ ${CLUSTER} == 'crusher' ]; then
 
   module swap PrgEnv-cray PrgEnv-amd
@@ -24,19 +26,18 @@ if [ ${CLUSTER} == 'crusher' ]; then
   module load cmake
   module load rocm/5.1.0
   module unload cray-libsci
+  export TARGET_GPU=gfx90a
   
   # Needed for GDR (this is the NVLINK stuff, if using CUDA backend)
   export MPICH_ROOT=/opt/cray/pe/mpich/8.1.16
   export GTL_ROOT=/opt/cray/pe/mpich/8.1.16/gtl/lib
   export MPICH_DIR=${MPICH_ROOT}/ofi/rocm-compiler/5.0
   
-  export TOPDIR_HIP=~/crusher/quda
-  export TARGET_GPU=gfx90a
   
 
 elif [ ${CLUSTER} == 'jlse' ]; then
 
-  # this needs to be hidden i think
+
   module use /soft/modulefiles
 # module swap PrgEnv-cray PrgEnv-amd
 #  module load craype-accel-amd-gfx90a
@@ -50,16 +51,21 @@ else
 fi
 
 
+module list
+
+
 #
-# Independent of the cluster.
+# Some common environment variables for QUDA and MILC. MILC needs to know where to
+# find QUDA, where it was installed, and so on. INSTALL is a folder that organizes all
+# "install" folders, which the USQCD people and QUDA seem to like. 
 #
-export SRCROOT=${TOPDIR_HIP}
-export BUILDROOT=${TOPDIR_HIP}
-export INSTALLROOT=${TOPDIR_HIP}/install
+export QUDA_SRC=${HOME}/quda
+export QUDA_BUILD=${HOME}/build_quda
+export INSTALLROOT=${HOME}/install
+export QUDA_INSTALL=${INSTALLROOT}/quda
 export PATH=${ROCM_PATH}/bin:${ROCM_PATH}/llvm/bin:${PATH}
 export LD_LIBRARY_PATH=${INSTALLROOT}/quda/lib:${INSTALLROOT}/qmp/lib:${INSTALLROOT}/qio/lib:${ROCM_PATH}/llvm/lib64:${ROCM_PATH}/llvm/lib:${MPICH_DIR}/lib:${GTL_ROOT}:${LD_LIBRARY_PATH}
 
-module list
 
 MPI_LDFLAGS="-g -Wl,-rpath=${MPICH_DIR}/lib -L${MPICH_DIR}/lib -lmpi -L${GTL_ROOT} -Wl,-rpath=${GTL_ROOT} -lmpi_gtl_hsa"
 MPI_CFLAGS="-I${MPICH_DIR}/include -g"
