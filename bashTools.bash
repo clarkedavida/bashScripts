@@ -289,3 +289,14 @@ function _countFilesInFolder {
   _checkIfParamEmpty "folder name and regular expression" $2
   find $1 -type f -name $2 | wc -l
 }
+
+
+#
+# RECURSIVE COUNT TOTAL FILES IN HOME. Example use: 
+#   _countTotalFiles
+#
+function _countTotalFiles {
+  cd
+  find . -type f | wc -l
+}
+

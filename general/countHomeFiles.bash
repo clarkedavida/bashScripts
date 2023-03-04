@@ -8,4 +8,4 @@
 
 source "${bashToolsPath}/bashTools.bash"
 
-_countFilesInFolder $1 $2
+_countTotalFiles

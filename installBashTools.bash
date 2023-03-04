@@ -18,6 +18,7 @@ echo "alias unarchive=\"\${bashToolsPath}/general/untar.bash\"" >> ${bashrcFile}
 echo "alias comments=\"\${bashToolsPath}/general/comments.bash\"" >> ${bashrcFile}
 echo "alias concatenateFiles=\"\${bashToolsPath}/general/concatenateFiles.bash\"" >> ${bashrcFile}
 echo "alias countFiles=\"\${bashToolsPath}/general/countFiles.bash\"" >> ${bashrcFile}
+echo "alias totalFiles=\"\${bashToolsPath}/general/countHomeFiles.bash\"" >> ${bashrcFile}
 
 source ${bashrcFile}
 
