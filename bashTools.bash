@@ -141,7 +141,7 @@ function _createCompressedSubfolders {
     if [ ! -d ${subfolder} ]; then continue; fi
     echo "  "${subfolder}
     tar -zcf ${subfolder}.tgz ${subfolder}
-    _checkForFail $? "Unable to tgz this folder, aborting."
+    _checkForFail $? "compress folder."
     rm -rf ${subfolder}
   done
   cd ..
@@ -165,7 +165,7 @@ function _decompressSubfolders {
     if [ $? -eq 1 ]; then continue; fi
     echo "  "${archive}
     tar -zxf ${archive}
-    _checkForFail $? "Unable to untgz this archive, aborting."
+    _checkForFail $? "decompress folder"
     rm ${archive} 
   done
   cd ..
@@ -188,7 +188,7 @@ function _createTarSubfolders {
     if [ ! -d ${subfolder} ]; then continue; fi
     echo "  "${subfolder}
     tar -cf ${subfolder}.tar ${subfolder}
-    _checkForFail $? "Unable to tar this folder, aborting."
+    _checkForFail $? "compress folder"
     rm -rf ${subfolder}
   done
   cd ..
@@ -211,7 +211,7 @@ function _openTarSubfolders {
     _checkExtension ${archive} tar
     echo "  "${archive}
     tar -xf ${archive} 
-    _checkForFail $? "Unable to open this archive, aborting."
+    _checkForFail $? "decompress folder"
     rm -rf ${archive}
   done
   cd ..
