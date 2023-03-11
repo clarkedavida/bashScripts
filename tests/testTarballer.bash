@@ -10,6 +10,7 @@
 
 source ${bashToolsPath}"/bashTools.bash"
 
+rm -rf tarBaller
 cp -r tarBallerTestFolder tarBaller
 
 TESTFOLDER="tarBaller"

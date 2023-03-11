@@ -78,8 +78,6 @@ function _checkForError {
 function _checkForFail {
   if [ ! $1 -eq 0 ]; then 
     _bashFail "$2"
-  else
-    _bashPass "$2"
   fi
 }
 
@@ -129,11 +127,24 @@ function _checkPassError {
 
 
 #
+# MAKE CHECKSUM FILE. Example use:
+#   _checkSum fileName
+#
+function _checkSum {
+  local fileName=$1
+  _checkIfParamEmpty "fileName" ${fileName}
+  md5sum ${fileName} > ${fileName}.md5
+  _checkForFail $? "Unable to md5sum ${fileName}"
+}
+
+
+#
 # COMPRESS ALL SUBFOLDERS INTO TARBALLS. Example use:
 #   _createCompressedSubfolders folder
 #
 function _createCompressedSubfolders {
   local folder=$1
+  _checkIfParamEmpty "folder" ${folder} 
   echo
   echo "Compressing subfolders using tar..."
   cd ${folder}
@@ -142,6 +153,7 @@ function _createCompressedSubfolders {
     echo "  "${subfolder}
     tar -zcf ${subfolder}.tgz ${subfolder}
     _checkForFail $? "compress folder."
+    _checkSum ${subfolder}.tgz
     rm -rf ${subfolder}
   done
   cd ..
@@ -157,6 +169,7 @@ function _createCompressedSubfolders {
 #
 function _decompressSubfolders {
   local folder=$1
+  _checkIfParamEmpty "folder" ${folder} 
   echo
   echo "Decompressing archives using tar..."
   cd ${folder}
@@ -164,6 +177,9 @@ function _decompressSubfolders {
     _checkExtension ${archive} tgz
     if [ $? -eq 1 ]; then continue; fi
     echo "  "${archive}
+    if [ -f ${archive}.md5 ]; then
+      md5sum -c --quiet ${archive}.md5
+    fi    
     tar -zxf ${archive}
     _checkForFail $? "decompress folder"
     rm ${archive} 
@@ -181,6 +197,7 @@ function _decompressSubfolders {
 #
 function _createTarSubfolders {
   local folder=$1
+  _checkIfParamEmpty "folder" ${folder} 
   echo
   echo "Combining subfolders using tar..."
   cd ${folder}
@@ -189,6 +206,7 @@ function _createTarSubfolders {
     echo "  "${subfolder}
     tar -cf ${subfolder}.tar ${subfolder}
     _checkForFail $? "compress folder"
+    _checkSum ${subfolder}.tar
     rm -rf ${subfolder}
   done
   cd ..
@@ -204,12 +222,16 @@ function _createTarSubfolders {
 #
 function _openTarSubfolders {
   local folder=$1
+  _checkIfParamEmpty "folder" ${folder} 
   echo
   echo "Open subfolders using tar..."
   cd ${folder}
   for archive in *; do
     _checkExtension ${archive} tar
     echo "  "${archive}
+    if [ -f ${archive}.md5 ]; then
+      md5sum -c --quiet ${archive}.md5
+    fi    
     tar -xf ${archive} 
     _checkForFail $? "decompress folder"
     rm -rf ${archive}
