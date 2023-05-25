@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 
-# testCompareFiles.bash
+# testWhitespace.bash
 # 
 # D. Clarke 
 # 

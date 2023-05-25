@@ -63,21 +63,35 @@ function _bashInfo {
 
 
 #
-# CHECK ERROR. Example use:
+# CHECK FOR ERRORS OR FAILURES. Example use:
 #   _checkForError $? "That was not supposed to happen..."
 #
 function _checkForError {
   if [ ! $1 -eq 0 ]; then _bashError "$2"; fi
 }
-
-
-#
-# CHECK FAIL. Example use:
-#   _checkForFail $? "Something went wrong."
-#
 function _checkForFail {
   if [ ! $1 -eq 0 ]; then 
     _bashFail "$2"
+  fi
+}
+
+
+#
+# OUTPUT FOR TESTS. Example use:
+# _checkPassFail $? "Test name"
+#
+function _checkPassFail {
+  if [ $1 -eq 0 ]; then
+    _bashPass "$2"
+  else
+    _bashFail "$2"
+  fi
+}
+function _checkPassError {
+  if [ $1 -eq 0 ]; then
+    _bashPass "$2"
+  else
+    _bashError "$2"
   fi
 }
 
@@ -107,26 +121,6 @@ function _checkExtension {
 
 
 #
-# OUTPUT FOR TESTS. Example use:
-# _checkPassFail $? "Test name"
-#
-function _checkPassFail {
-  if [ $1 -eq 0 ]; then
-    _bashPass "$2"
-  else
-    _bashFail "$2"
-  fi
-}
-function _checkPassError {
-  if [ $1 -eq 0 ]; then
-    _bashPass "$2"
-  else
-    _bashError "$2"
-  fi
-}
-
-
-#
 # MAKE CHECKSUM FILE. Example use:
 #   _checkSum fileName
 #
@@ -135,6 +129,23 @@ function _checkSum {
   _checkIfParamEmpty "fileName" ${fileName}
   md5sum ${fileName} > ${fileName}.md5
   _checkForFail $? "Unable to md5sum ${fileName}"
+}
+
+
+#
+# COMPRESS A FOLDER. Example use
+#   _compressFolder subfolder
+#
+function _compressFolder {
+  local subfolder=$1
+  if [ ! -d ${subfolder} ]; then 
+    _bashFail "must call on folder"
+  fi
+  echo "  "${subfolder}
+  tar -zcf ${subfolder}.tgz ${subfolder}
+  _checkForFail $? "compress folder"
+  _checkSum ${subfolder}.tgz
+  rm -rf ${subfolder}
 }
 
 
@@ -151,15 +162,35 @@ function _createCompressedSubfolders {
   for subfolder in *; do
     if [ ! -d ${subfolder} ]; then continue; fi
     echo "  "${subfolder}
-    tar -zcf ${subfolder}.tgz ${subfolder}
-    _checkForFail $? "compress folder."
-    _checkSum ${subfolder}.tgz
-    rm -rf ${subfolder}
+    _compressFolder ${subfolder}
   done
   cd ..
   echo
   echo "Done."
   echo
+}
+
+
+#
+# DECOMPRESS A TARBALL. Example use:
+#   _decompressTarball archive
+#
+function _decompressTarball {
+  local archive=$1
+  _checkExtension ${archive} tgz
+  if [ $? -eq 1 ]; then
+    _bashFail "must call on .tgz file" 
+  fi 
+  echo "  "${archive}
+  if [ -f ${archive}.md5 ]; then
+    md5sum -c --quiet ${archive}.md5
+  fi    
+  tar -zxf ${archive}
+  _checkForFail $? "decompress folder"
+  rm ${archive}
+  if [ -f ${archive}.md5 ]; then
+    rm ${archive}.md5
+  fi    
 }
 
 
@@ -176,19 +207,28 @@ function _decompressSubfolders {
   for archive in *; do
     _checkExtension ${archive} tgz
     if [ $? -eq 1 ]; then continue; fi
-    echo "  "${archive}
-    if [ -f ${archive}.md5 ]; then
-      md5sum -c --quiet ${archive}.md5
-    fi    
-    tar -zxf ${archive}
-    _checkForFail $? "decompress folder"
-    rm ${archive} 
+    _decompressTarball ${archive}
   done
   cd ..
   echo
   echo "Done."
   echo
 }
+
+
+#
+# TAR A FOLDER. Example use:
+#   _tarFolder subfolder
+#
+function _tarFolder {
+  local subfolder=$1
+  if [ ! -d ${subfolder} ]; then continue; fi
+  echo "  "${subfolder}
+  tar -cf ${subfolder}.tar ${subfolder}
+  _checkForFail $? "compress folder"
+  _checkSum ${subfolder}.tar
+  rm -rf ${subfolder}
+} 
 
 
 #
@@ -203,16 +243,35 @@ function _createTarSubfolders {
   cd ${folder}
   for subfolder in *; do
     if [ ! -d ${subfolder} ]; then continue; fi
-    echo "  "${subfolder}
-    tar -cf ${subfolder}.tar ${subfolder}
-    _checkForFail $? "compress folder"
-    _checkSum ${subfolder}.tar
-    rm -rf ${subfolder}
+    _tarFolder ${subfolder}
   done
   cd ..
   echo
   echo "Done."
   echo
+}
+
+
+#
+# OPEN A TARBALL. Example use:
+#   _decompressTarball archive
+#
+function _openTarball {
+  local archive=$1
+  _checkExtension ${archive} tar
+  if [ $? -eq 1 ]; then
+    _bashFail "must call on .tar file" 
+  fi 
+  echo "  "${archive}
+  if [ -f ${archive}.md5 ]; then
+    md5sum -c --quiet ${archive}.md5
+  fi    
+  tar -xf ${archive}
+  _checkForFail $? "open folder"
+  rm ${archive}
+  if [ -f ${archive}.md5 ]; then
+    rm ${archive}.md5
+  fi    
 }
 
 
@@ -228,13 +287,8 @@ function _openTarSubfolders {
   cd ${folder}
   for archive in *; do
     _checkExtension ${archive} tar
-    echo "  "${archive}
-    if [ -f ${archive}.md5 ]; then
-      md5sum -c --quiet ${archive}.md5
-    fi    
-    tar -xf ${archive} 
-    _checkForFail $? "decompress folder"
-    rm -rf ${archive}
+    if [ $? -eq 1 ]; then continue; fi
+    _openTarball ${archive}
   done
   cd ..
   echo
@@ -322,3 +376,29 @@ function _countTotalFiles {
   find . -type f | wc -l
 }
 
+
+#
+# REMOVE TRAILING WHITE SPACE. Example use:
+#   _removeTrailingWhitespace filename.txt
+#
+function _removeTrailingWhitespace {
+  _checkIfParamEmpty "file name" $1
+  if [ -f "$1" ]; then
+    sed -i 's/[[:blank:]]*$//' "$1"
+  fi 
+}
+
+
+#
+# CHECK IF EOF HAS NEWLINE. Example use:
+#   _checkNewlineEOF filename.txt
+#
+function _checkNewlineEOF {
+  num_lines=$(wc -l < $1)
+  last_char=$(tail -c 1 $1)
+  if [ $num_lines -gt 0 ] && [ "$last_char" == "" ]; then
+    : 
+  else
+    echo "$1 has no newline at EOF"
+  fi
+}

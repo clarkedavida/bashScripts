@@ -51,6 +51,13 @@ for i in "${arrayName[@]}"; do
 done
 ```
 
+## Loop recursively over all files ending in .h 
+```shell
+for file in $(find . -name "*.h"); do 
+  ... 
+done
+```
+
 ## Sort table on 1st then 2nd columns
 ```shell
 sort -k1,2 table > temp

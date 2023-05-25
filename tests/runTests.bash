@@ -13,3 +13,4 @@ bash testBetaListNf3.bash
 bash testCheckArray.bash 
 bash testCheckExtension.bash
 bash testCompareFiles.bash
+bash testWhitespace.bash
