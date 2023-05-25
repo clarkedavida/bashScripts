@@ -161,7 +161,6 @@ function _createCompressedSubfolders {
   cd ${folder}
   for subfolder in *; do
     if [ ! -d ${subfolder} ]; then continue; fi
-    echo "  "${subfolder}
     _compressFolder ${subfolder}
   done
   cd ..
