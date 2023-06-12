@@ -9,6 +9,10 @@
 #
 
 
+# Whatever you do, do not google this date. 
+export BASHTOOLSSEED=7281978
+
+
 #
 # COLORS. Example use: 
 #   echo -e "  ${cred}ERROR encountered while running in this folder!${endc}"

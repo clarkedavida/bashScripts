@@ -39,6 +39,16 @@ X=$(echo $Y | cut -dm -f2)
 X=$(printf "%0Nd" X)
 ```
 
+## Arithmetic
+```shell
+$((BASHTOOLSSEED+$i))
+```
+
+## Array
+```shell
+auxiliaryFiles=(rand0)
+```
+
 ## Sequence
 ```shell
 thing=($(seq 1 512))
