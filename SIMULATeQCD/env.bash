@@ -16,11 +16,11 @@ export GITLFSFOLDER=${HOME}/git-lfs
 #
 # Tested cluster	Date of last known compilation
 #
-# bielefeld		2023 Jan 10
+# bielefeld		2023 Aug 11 
 # crusher		2023 Jan 10
 # lumi-G		2023 Jan 10
 #
-export CLUSTER=crusher
+export CLUSTER=bielefeld
 
 if [ ${CLUSTER} == 'crusher' ]; then
 
@@ -55,3 +55,7 @@ elif [ ${CLUSTER} == 'lumig' ]; then
 else
   _bashFail "Unrecognized cluster ${CLUSTER}."
 fi
+
+echo
+echo "LOAD ENVIRONMENT ${CLUSTER}"
+echo

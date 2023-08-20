@@ -79,3 +79,8 @@ export LD_LIBRARY_PATH=${INSTALLROOT}/quda/lib:${INSTALLROOT}/qmp/lib:${INSTALLR
 MPI_LDFLAGS="-g -Wl,-rpath=${MPICH_DIR}/lib -L${MPICH_DIR}/lib -lmpi -L${GTL_ROOT} -Wl,-rpath=${GTL_ROOT} -lmpi_gtl_hsa"
 MPI_CFLAGS="-I${MPICH_DIR}/include -g"
 export PK_BUILD_TYPE="Release"
+
+echo
+echo "LOAD ENVIRONMENT ${CLUSTER}"
+echo
+
