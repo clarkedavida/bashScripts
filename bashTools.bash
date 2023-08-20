@@ -364,9 +364,14 @@ function _lookForFile {
 #   _countFilesInFolder l3216f3b6315m00281m07587 "*.check"
 #
 function _countFilesInFolder {
-  _checkIfParamEmpty "folder name and regular expression" $1
-  _checkIfParamEmpty "folder name and regular expression" $2
-  find $1 -type f -name $2 | wc -l
+  _checkIfParamEmpty "folder name" $1
+  if [ -z ${2} ]; then
+    echo "Counting all files." 
+    find $1 -type f | wc -l
+  else
+    echo "Counting files of form $2" 
+    find $1 -type f -name $2 | wc -l
+  fi
 }
 
 
