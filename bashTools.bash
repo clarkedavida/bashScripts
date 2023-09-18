@@ -119,6 +119,8 @@ function _checkIfParamEmpty {
 # Returns 0 if the extension matches.
 #
 function _checkExtension {
+  _checkIfParamEmpty "fileName" ${1}
+  _checkIfParamEmpty "extension" ${2}
   case $1 in *.$2) return 0;; esac
   return 1
 }
@@ -409,4 +411,29 @@ function _checkNewlineEOF {
   else
     echo "$1 has no newline at EOF"
   fi
+}
+
+
+#
+# DOES STRING START WITH SUBSTRING? Example use:
+#   _startsWith helloWorld hello
+#
+function _startsWith {
+  string=$1
+  substring=$2
+  _checkIfParamEmpty "string" ${1}
+  _checkIfParamEmpty "substring" ${2}
+  if [[ $1 == "$2"* ]]; then
+      return 0 
+  else
+      return 1 
+  fi
+}
+
+
+#
+# UPDATE ALL TIMESTAMPS RECURSIVELY IN CURRENT DIRECTORY. 
+#
+function _touchEverything {
+  find . -exec touch {} \;
 }
