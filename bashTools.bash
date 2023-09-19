@@ -74,9 +74,7 @@ function _checkForError {
   if [ ! $1 -eq 0 ]; then _bashError "$2"; fi
 }
 function _checkForFail {
-  if [ ! $1 -eq 0 ]; then 
-    _bashFail "$2"
-  fi
+  if [ ! $1 -eq 0 ]; then _bashFail "$2"; fi
 }
 
 

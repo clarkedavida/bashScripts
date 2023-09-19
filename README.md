@@ -11,6 +11,7 @@ submit jobs, and automate measurements for lattice QCD. These include:
 - `MILC`: Some scripts to assist with building MILC code.
 - `profilingExamples`: Some examples how to use profilers. These could be made more general later.
 - `SIMULATeQCD`: Some scripts to assist with building SIMULATeQCD. 
+- `simulationManagement`: Script to assist with setting up lattice runs.
 - `slurm`: A collection of scripts to help manage clusters using slurm.
 - `tests`: Some tests to make sure the installation worked. 
 

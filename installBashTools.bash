@@ -22,6 +22,7 @@ echo "alias countFiles=\"\${bashToolsPath}/general/countFiles.bash\"" >> ${bashr
 echo "alias totalFiles=\"\${bashToolsPath}/general/countHomeFiles.bash\"" >> ${bashrcFile}
 echo "alias befiddle=\"\${bashToolsPath}/general/befiddle.bash\"" >> ${bashrcFile}
 echo "alias compareFolders=\"\${bashToolsPath}/general/compareFolders.bash\"" >> ${bashrcFile}
+echo "alias extractArxiv=\"\${bashToolsPath}/general/extractArxiv.bash\"" >> ${bashrcFile}
 
 source ${bashrcFile}
 
