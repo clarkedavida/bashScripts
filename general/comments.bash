@@ -1,19 +1,19 @@
 #!/bin/bash
 
- #     
- # comments.bash                                                
- #
- # D. Clarke, 30 May 2015
- #
- # Bash script to generate standard comment headings for new programs. Call
- # using
- #
- # 	sh comments.sh [-l language] [-f] [program name]
- #
- # where [language] can be one of {bash, c (default), fortran, python},
- # [program name] should include the extension (e.g. program.f) and -f will
- # put the comment block at the top of a previously existing file.
- #
+#     
+# comments.bash                                                
+#
+# D. Clarke
+#
+# Bash script to generate standard comment headings for new programs. Call
+# using
+#
+# 	sh comments.sh [-l language] [-f] [program name]
+#
+# where [language] can be one of {bash, c (default), fortran, python},
+# [program name] should include the extension (e.g. program.f) and -f will
+# put the comment block at the top of a previously existing file.
+#
 
 # Usage
 usage()
@@ -131,8 +131,6 @@ ${c2}
 ${c2}[F. Last]
 ${c2}
 ${c2}[Program description]
-${c2}
-${c2}[Call using...]
 ${c2}
 ${c3}" > temp1
 fi

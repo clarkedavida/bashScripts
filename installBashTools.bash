@@ -20,6 +20,8 @@ echo "alias comments=\"\${bashToolsPath}/general/comments.bash\"" >> ${bashrcFil
 echo "alias concatenateFiles=\"\${bashToolsPath}/general/concatenateFiles.bash\"" >> ${bashrcFile}
 echo "alias countFiles=\"\${bashToolsPath}/general/countFiles.bash\"" >> ${bashrcFile}
 echo "alias totalFiles=\"\${bashToolsPath}/general/countHomeFiles.bash\"" >> ${bashrcFile}
+echo "alias befiddle=\"\${bashToolsPath}/general/befiddle.bash\"" >> ${bashrcFile}
+echo "alias compareFolders=\"\${bashToolsPath}/general/compareFolders.bash\"" >> ${bashrcFile}
 
 source ${bashrcFile}
 
