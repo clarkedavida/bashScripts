@@ -29,13 +29,21 @@ cwhi="\e[97m"
 
 
 #
+# UNDERLYING LOGGING COMMAND. Example use:
+#   _bashLog "message!"
+#
+function _bashLog {
+    # The @ sign indicates all arguments passed to this function.
+    echo -e "[$(date)] $@"
+}
+
+
+#
 # FAIL AND EXIT. Example use:
 #   _bashFail "Division by zero!"
 #
 function _bashFail {
-  echo
-  echo -e "  ${cred}FAIL: $1 ${endc}"
-  echo
+  _bashLog "${cred}FAIL: $1 ${endc}"
   exit
 }
 
@@ -45,24 +53,16 @@ function _bashFail {
 #   _bashWarn "Using this package is not recommended."
 #
 function _bashError {
-  echo
-  echo -e "  ${cred}ERROR: $1 ${endc}"
-  echo
+  _bashLog "${cred}ERROR: $1 ${endc}"
 } 
 function _bashWarn {
-  echo
-  echo -e "  ${cyel}WARNING: $1 ${endc}"
-  echo
+  _bashLog "${cyel}WARNING: $1 ${endc}"
 } 
 function _bashPass {
-  echo
-  echo -e "  ${cgrn}SUCCESS: $1 ${endc}"
-  echo
+  _bashLog "${cgrn}PASS: $1 ${endc}"
 }
 function _bashInfo {
-  echo
-  echo -e "  ${ccyn}INFO: $1 ${endc}"
-  echo
+  _bashLog "${ccyn}INFO: $1 ${endc}"
 }
 
 
