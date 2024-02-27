@@ -19,8 +19,9 @@ export GITLFSFOLDER=${HOME}/git-lfs
 # bielefeld		2023 Aug 11 
 # crusher		2023 Jan 10
 # lumi-G		2023 Jan 10
+# summit
 #
-export CLUSTER=bielefeld
+export CLUSTER=summit
 
 if [ ${CLUSTER} == 'crusher' ]; then
 
@@ -33,6 +34,16 @@ if [ ${CLUSTER} == 'crusher' ]; then
   export CXX=hipcc
   export GPUMAKE=hip
   export GPUARCH=gfx90a
+
+elif [ ${CLUSTER} == 'summit' ]; then
+
+  module load cmake
+  module load cuda
+  module load ums/default
+  module load ums-stf010/default
+  module load gcc/11.1.0-latest
+  export GPUMAKE=cuda
+  export GPUARCH=70
 
 elif [ ${CLUSTER} == 'bielefeld' ]; then
 

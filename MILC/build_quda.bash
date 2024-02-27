@@ -14,12 +14,13 @@
 source "${bashToolsPath}/MILC/env.bash"
 
 
-#BRANCH_NAME=develop
+BRANCH_NAME=develop
 #BRANCH_NAME=feature/staggered_correlators_gk
-BRANCH_NAME=feature/sycl
+#BRANCH_NAME=feature/sycl
 
 
 _bashInfo "Working with QUDA_SRC = ${QUDA_SRC}"
+_bashInfo "Branch name = ${BRANCH_NAME}"
 
 
 if [ ${BRANCH_NAME} == 'feature/staggered_correlators_gk' ]; then

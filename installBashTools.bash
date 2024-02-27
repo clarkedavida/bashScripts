@@ -11,6 +11,7 @@ echo "alias whatsInQueue=\"\${bashToolsPath}/slurm/whatsInQueue.bash\"" >> ${bas
 echo "alias nodeList=\"\${bashToolsPath}/slurm/nodeList.bash\"" >> ${bashrcFile}
 echo "alias buildQUDA=\"\${bashToolsPath}/MILC/build_quda.bash\"" >> ${bashrcFile}
 echo "alias buildMILC=\"\${bashToolsPath}/MILC/build_milc_quda.bash\"" >> ${bashrcFile}
+echo "alias buildSIMULATEQCD=\"\${bashToolsPath}/SIMULATeQCD/installSIMULATeQCD.bash\"" >> ${bashrcFile}
 echo "alias whatsMyOS=\"\${bashToolsPath}/general/whatsMyOS.bash\"" >> ${bashrcFile}
 echo "alias untgz=\"\${bashToolsPath}/general/untgz.bash\"" >> ${bashrcFile}
 echo "alias tgz=\"\${bashToolsPath}/general/tgz.bash\"" >> ${bashrcFile}
