@@ -37,7 +37,7 @@ fi
 
 
 mkdir -p ${BUILDFOLDER}
-cp ${bashToolsPath}/SIMULATeQCD/cleanSIMULATeQCD.bash .
+cp ${bashToolsPath}/SIMULATeQCD/${CLEANSCRIPT} .
 cd ${BUILDFOLDER}
-cp ${bashToolsPath}/SIMULATeQCD/configureSIMULATeQCD.bash .
-./configureSIMULATeQCD.bash
+cp ${bashToolsPath}/SIMULATeQCD/${CONFSCRIPT} .
+./${CONFSCRIPT}

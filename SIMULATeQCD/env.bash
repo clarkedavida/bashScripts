@@ -12,16 +12,18 @@ source "${bashToolsPath}/bashTools.bash"
 
 export BUILDFOLDER=buildSIMULATeQCD
 export GITLFSFOLDER=${HOME}/git-lfs
+export CONFSCRIPT=configureSIMULATeQCD.bash
+export CLEANSCRIPT=cleanSIMULATeQCD.bash
 
 #
 # Tested cluster	Date of last known compilation
 #
+# NONE                  2024 Jun 04 
 # bielefeld		2023 Aug 11 
 # crusher		2023 Jan 10
-# lumi-G		2023 Jan 10
-# summit
 # houston
-# MANJARO
+# lumi-G		2023 Jan 10
+# summit                2024 Mar
 #
 export CLUSTER=NONE
 export DEFAULTMAKE=cuda
