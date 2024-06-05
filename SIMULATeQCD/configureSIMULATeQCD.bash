@@ -13,7 +13,7 @@ source "${bashToolsPath}/SIMULATeQCD/env.bash"
 
 if [ ${GPUMAKE} == 'cuda' ]; then
 
-  echo 'Building using CUDA'
+  _bashInfo 'Building using CUDA'
   cmake ../SIMULATeQCD/ \
 -DARCHITECTURE="${GPUARCH}" \
 -DUSE_GPU_AWARE_MPI=ON \
@@ -22,7 +22,7 @@ if [ ${GPUMAKE} == 'cuda' ]; then
 # Double check whether DUSE_CUDA and DUSE_HIP_AMD needed
 elif [ ${GPUMAKE} == 'hip' ]; then
 
-  echo 'Building using HIP'
+  _bashInfo 'Building using HIP'
   cmake ../SIMULATeQCD/ \
 -DARCHITECTURE="${GPUARCH}" \
 -DUSE_GPU_AWARE_MPI=ON \

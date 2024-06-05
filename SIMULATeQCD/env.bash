@@ -20,10 +20,23 @@ export GITLFSFOLDER=${HOME}/git-lfs
 # crusher		2023 Jan 10
 # lumi-G		2023 Jan 10
 # summit
+# houston
+# MANJARO
 #
-export CLUSTER=summit
+export CLUSTER=NONE
+export DEFAULTMAKE=cuda
+export DEFAULTARCH=61
 
-if [ ${CLUSTER} == 'crusher' ]; then
+if [ ${CLUSTER} == 'NONE' ]; then
+
+  export GPUMAKE=${DEFAULTMAKE}
+  export GPUARCH=${DEFAULTARCH}
+  nvcc --version
+  _checkForFail $? 'You need to install CUDA'
+  mpirun --version
+  _checkForFail $? 'You need to install OPENMPI'
+
+elif [ ${CLUSTER} == 'crusher' ]; then
 
   module load PrgEnv-amd
   module load craype-accel-amd-gfx90a
@@ -67,6 +80,3 @@ else
   _bashFail "Unrecognized cluster ${CLUSTER}."
 fi
 
-echo
-echo "LOAD ENVIRONMENT ${CLUSTER}"
-echo

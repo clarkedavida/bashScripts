@@ -182,7 +182,10 @@ function _decompressTarball {
   local archive=$1
   _checkExtension ${archive} tgz
   if [ $? -eq 1 ]; then
-    _bashFail "must call on .tgz file" 
+    _checkExtension ${archive} gz
+    if [ $? -eq 1 ]; then
+      _bashFail "must call on .tgz or .gz file"
+    fi
   fi 
   echo "  "${archive}
   if [ -f ${archive}.md5 ]; then

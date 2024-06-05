@@ -10,29 +10,34 @@
 
 source "${bashToolsPath}/SIMULATeQCD/env.bash"
 bashrcFile=${HOME}/.bashrc
+THISFOLDER=$(pwd)
 
+_bashInfo "Build for cluster ${CLUSTER}"
 
 if [ ! -d SIMULATeQCD ]; then
-  if [ ! -d git-lfs ]; then
+  if [ ! -d ${GITLFSFOLDER} ]; then
     echo
-    echo 'Installing git-lfs, which was assumed to be in your home directory.'
+    _bashInfo "Installing git-lfs, which was assumed to be in ${HOME}."
     echo
-    mkdir git-lfs
-    cd git-lfs
+    mkdir ${GITLFSFOLDER}
+    cd ${GITLFSFOLDER}
     wget https://github.com/git-lfs/git-lfs/releases/download/v3.0.2/git-lfs-linux-amd64-v3.0.2.tar.gz
-    tar -xf git-lfs-linux-amd64-v3.0.2.tar.gz
+    _checkForFail $? "wget"
+    _decompressTarball git-lfs-linux-amd64-v3.0.2.tar.gz
     PREFIX=${GITLFSFOLDER} ./install.sh
+    _checkForFail $? "gitlfs_install.sh"
     echo "export PATH=${GITLFSFOLDER}/bin:\$PATH" >> ${bashrcFile}
-    cd ..
+    cd ${THISFOLDER}
   fi
-  source .bashrc 
+  source ${bashrcFile} 
   ${GITLFSFOLDER}/bin/git-lfs install
+  _checkForFail $? "gitlfs_install"
   git clone git@github.com:LatticeQCD/SIMULATeQCD.git
 fi
 
 
 mkdir -p ${BUILDFOLDER}
-cp ${bashToolsPath}/SIMULATeQCD/cleany.bash .
+cp ${bashToolsPath}/SIMULATeQCD/cleanSIMULATeQCD.bash .
 cd ${BUILDFOLDER}
-cp ${bashToolsPath}/SIMULATeQCD/myconf.bash .
-./myconf.bash
+cp ${bashToolsPath}/SIMULATeQCD/configureSIMULATeQCD.bash .
+./configureSIMULATeQCD.bash
