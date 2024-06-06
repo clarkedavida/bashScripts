@@ -21,13 +21,15 @@ export CLEANSCRIPT=cleanSIMULATeQCD.bash
 # NONE                  2024 Jun 04 
 # bielefeld		2023 Aug 11 
 # crusher		2023 Jan 10
+# fermilab              2024 Jun 06
 # houston
 # lumi-G		2023 Jan 10
 # summit                2024 Mar
 #
-export CLUSTER=NONE
 export DEFAULTMAKE=cuda
 export DEFAULTARCH=61
+
+export CLUSTER=fermilab
 
 if [ ${CLUSTER} == 'NONE' ]; then
 
@@ -77,6 +79,15 @@ elif [ ${CLUSTER} == 'lumig' ]; then
   export HIP_PATH=${ROCM_PATH}/hip
   export GPUMAKE=hip
   export GPUARCH=gfx90a
+
+elif [ ${CLUSTER} == 'fermilab' ]; then
+
+  module load cmake
+  module load cuda
+  module load gcc 
+  module load gompi
+  export GPUMAKE=cuda
+  export GPUARCH=80
 
 else
   _bashFail "Unrecognized cluster ${CLUSTER}."
