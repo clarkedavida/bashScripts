@@ -10,6 +10,6 @@
  
 source "${bashToolsPath}/SIMULATeQCD/env.bash"
 
-mv ${BUILDFOLDER}/myconf.bash* .
+mv ${BUILDFOLDER}/${CONFSCRIPT}* .
 rm -rf ${BUILDFOLDER}/*
-mv myconf.bash* ${BUILDFOLDER}/. 
+mv ${CONFSCRIPT}* ${BUILDFOLDER}/. 

@@ -21,7 +21,7 @@ export CLEANSCRIPT=cleanSIMULATeQCD.bash
 # NONE                  2024 Jun 04 
 # bielefeld		2023 Aug 11 
 # crusher		2023 Jan 10
-# fermilab              2024 Jun 06
+# fermilab              2024 Jun 07
 # houston
 # lumi-G		2023 Jan 10
 # summit                2024 Mar
@@ -83,9 +83,8 @@ elif [ ${CLUSTER} == 'lumig' ]; then
 elif [ ${CLUSTER} == 'fermilab' ]; then
 
   module load cmake
-  module load cuda
   module load gcc 
-  module load gompi
+  module load gompi ucx_cuda ucc_cuda
   export GPUMAKE=cuda
   export GPUARCH=80
 
