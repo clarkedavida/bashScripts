@@ -43,7 +43,7 @@ function _bashLog {
 #   _bashFail "Division by zero!"
 #
 function _bashFail {
-  _bashLog "${cred}FAIL: $1 ${endc}"
+  _bashLog "${cred}FAIL: $@ ${endc}"
   exit
 }
 
@@ -53,16 +53,16 @@ function _bashFail {
 #   _bashWarn "Using this package is not recommended."
 #
 function _bashError {
-  _bashLog "${cred}ERROR: $1 ${endc}"
+  _bashLog "${cred}ERROR: $@ ${endc}"
 } 
 function _bashWarn {
-  _bashLog "${cyel}WARNING: $1 ${endc}"
+  _bashLog "${cyel}WARNING: $@ ${endc}"
 } 
 function _bashPass {
-  _bashLog "${cgrn}PASS: $1 ${endc}"
+  _bashLog "${cgrn}PASS: $@ ${endc}"
 }
 function _bashInfo {
-  _bashLog "${ccyn}INFO: $1 ${endc}"
+  _bashLog "${ccyn}INFO: $@ ${endc}"
 }
 
 
