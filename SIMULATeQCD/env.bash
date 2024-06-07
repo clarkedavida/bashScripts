@@ -35,9 +35,9 @@ if [ ${CLUSTER} == 'NONE' ]; then
 
   export GPUMAKE=${DEFAULTMAKE}
   export GPUARCH=${DEFAULTARCH}
-  nvcc --version
+  nvcc --version > /dev/null
   _checkForFail $? 'You need to install CUDA'
-  mpirun --version
+  mpirun --version > /dev/null
   _checkForFail $? 'You need to install OPENMPI'
 
 elif [ ${CLUSTER} == 'crusher' ]; then
