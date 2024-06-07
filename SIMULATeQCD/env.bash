@@ -29,15 +29,15 @@ export CLEANSCRIPT=cleanSIMULATeQCD.bash
 export DEFAULTMAKE=cuda
 export DEFAULTARCH=61
 
-export CLUSTER=fermilab
+export CLUSTER=NONE
 
-if [ ${CLUSTER} == 'NONE' ]; then
+if [ ${CLUSTER} == NONE ]; then
 
   export GPUMAKE=${DEFAULTMAKE}
   export GPUARCH=${DEFAULTARCH}
-  nvcc --version > /dev/null
+  nvcc --version > /dev/null 2>&1
   _checkForFail $? 'You need to install CUDA'
-  mpirun --version > /dev/null
+  mpirun --version > /dev/null 2>&1
   _checkForFail $? 'You need to install OPENMPI'
 
 elif [ ${CLUSTER} == 'crusher' ]; then

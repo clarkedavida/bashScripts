@@ -14,12 +14,13 @@ THISFOLDER=$(pwd)
 
 _bashInfo "Build for cluster ${CLUSTER}"
 
-git-lfs --version > /dev/null
+git-lfs --version > /dev/null 2>&1
 if [ ! $? -eq 0 ]; then
+  HAVENATIVEGITLFS=false
+  _bashInfo "No native git-lfs"
+else
   HAVENATIVEGITLFS=true
   _bashInfo "Detected native git-lfs"
-else
-  HAVENATIVEGITLFS=false
 fi
 
 
