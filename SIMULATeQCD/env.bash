@@ -6,30 +6,37 @@
 # D. Clarke 
 #
 # Environment script for SIMULATeQCD compilation. 
-# 
-
-source "${bashToolsPath}/bashTools.bash"
-
-export BUILDFOLDER=buildSIMULATeQCD
-export GITLFSFOLDER=${HOME}/git-lfs
-export CONFSCRIPT=configureSIMULATeQCD.bash
-export CLEANSCRIPT=cleanSIMULATeQCD.bash
-
 #
 # Tested cluster	Date of last known compilation
 #
 # NONE                  2024 Jun 04 
 # bielefeld		2023 Aug 11 
 # crusher		2023 Jan 10
-# fermilab              2024 Jun 07
+# fermilab              2024 Oct 26 
 # houston
 # lumi-G		2023 Jan 10
 # summit                2024 Mar
 #
-export DEFAULTMAKE=cuda
+
+source "${bashToolsPath}/bashTools.bash"
+
+#
+# User settings
+#
+export BUILDFOLDER=buildSIMULATeQCD
+export GITLFSFOLDER=${HOME}/git-lfs
+export CONFSCRIPT=configureSIMULATeQCD.bash
+export CLEANSCRIPT=cleanSIMULATeQCD.bash
+export CLUSTER=fermilab
+export GITTWOFACTOR=true
+
+#
+# These only need to be adjusted for CLUSTER=NONE, i.e.
+# if you are running something locally
+#
+export DEFAULTMAKE=cuda 
 export DEFAULTARCH=61
 
-export CLUSTER=NONE
 
 if [ ${CLUSTER} == NONE ]; then
 

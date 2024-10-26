@@ -24,5 +24,15 @@ with a few aliases for convenience scripts.  You may need to
 restart your terminal for the bashScripts to work. Try navigating to the `tests`
 folder and running `runTests.bash` to see if everything worked.
 
+## Building SIMULATeQCD
+
+First, edit `bashScripts/SIMULATeQCd/env.bash`. Among the user settings, you
+will need to update `CLUSTER` and `GITTWOFACTOR`, the latter of which specifies
+whether you have permission to `git push` to the SIMULATeQCD repository.
+If you are trying to compile locally, you
+can set `CLUSTER=NONE` and set the `DEFAULTMAKE` and `DEFAULTARCH` according
+to the hardware you have available.
+
 ## Ackowledgements
-Special thanks to C. DeTar for helping me get the interfacing with MILC to work.
+Special thanks to [C. DeTar](https://github.com/detar) 
+for helping me interface with MILC. 
