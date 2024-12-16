@@ -15,6 +15,8 @@
 # put the comment block at the top of a previously existing file.
 #
 
+AUTHOR="D. Clarke"
+
 # Usage
 usage()
 {
@@ -128,7 +130,7 @@ else
   echo "${c1}
 ${c2}${NAME}                                                               
 ${c2}
-${c2}[F. Last]
+${c2}${AUTHOR}
 ${c2}
 ${c2}[Program description]
 ${c2}
