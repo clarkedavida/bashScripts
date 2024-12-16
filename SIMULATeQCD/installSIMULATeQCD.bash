@@ -47,7 +47,13 @@ if [ ! -d SIMULATeQCD ]; then
     git-lfs install
     _checkForFail $? "gitlfs_install"
   fi
-  git clone git@github.com:LatticeQCD/SIMULATeQCD.git
+  if [ "${GITTWOFACTOR}" = true ]; then
+      _bashInfo "Git pull for developers"
+      git clone git@github.com:LatticeQCD/SIMULATeQCD.git
+  else
+      _bashInfo "Git pull for non-developers"
+      git clone https://github.com/LatticeQCD/SIMULATeQCD.git
+  fi
 fi
 
 
