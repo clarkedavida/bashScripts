@@ -11,6 +11,7 @@
 
 # Whatever you do, do not google this date. 
 export BASHTOOLSSEED=7281978
+export MAXPROCESSES=8
 
 
 #
@@ -165,9 +166,11 @@ function _createCompressedSubfolders {
   cd ${folder}
   for subfolder in *; do
     if [ ! -d ${subfolder} ]; then continue; fi
-    _compressFolder ${subfolder}
+    ((i=i%MAXPROCESSES)); ((i++==0)) && wait
+    _compressFolder ${subfolder} &
   done
   cd ..
+  wait
   echo
   echo "Done."
   echo
@@ -213,8 +216,10 @@ function _decompressSubfolders {
   for archive in *; do
     _checkExtension ${archive} tgz
     if [ $? -eq 1 ]; then continue; fi
-    _decompressTarball ${archive}
+    ((i=i%MAXPROCESSES)); ((i++==0)) && wait
+    _decompressTarball ${archive} &
   done
+  wait
   cd ..
   echo
   echo "Done."
@@ -249,8 +254,10 @@ function _createTarSubfolders {
   cd ${folder}
   for subfolder in *; do
     if [ ! -d ${subfolder} ]; then continue; fi
-    _tarFolder ${subfolder}
+    ((i=i%MAXPROCESSES)); ((i++==0)) && wait
+    _tarFolder ${subfolder} &
   done
+  wait
   cd ..
   echo
   echo "Done."
@@ -294,8 +301,10 @@ function _openTarSubfolders {
   for archive in *; do
     _checkExtension ${archive} tar
     if [ $? -eq 1 ]; then continue; fi
-    _openTarball ${archive}
+    ((i=i%MAXPROCESSES)); ((i++==0)) && wait
+    _openTarball ${archive} &
   done
+  wait
   cd ..
   echo
   echo "Done."

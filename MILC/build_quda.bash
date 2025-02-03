@@ -53,7 +53,32 @@ cd ${QUDA_BUILD}
 
 # BRANCH	DATE OF LAST COMPILATION 
 # develop       23 Jan 2023
-if [ ${CLUSTER} == 'crusher' ]; then
+if [ ${CLUSTER} == NONE ]; then
+
+  cmake \
+-DCMAKE_BUILD_TYPE=RELEASE \
+-DCMAKE_CXX_COMPILER=CC \
+-DCMAKE_CXX_FLAGS="--offload-arch=gfx90a" \
+-DCMAKE_C_COMPILER=cc \
+-DCMAKE_C_FLAGS="--offload-arch=gfx90a" \
+-DCMAKE_C_STANDARD=99 \
+-DCMAKE_EXE_LINKER_FLAGS="--offload-arch=gfx90a" \
+-DCMAKE_HIP_FLAGS="--offload-arch=gfx90a" \
+-DCMAKE_INSTALL_PREFIX=${QUDA_INSTALL} \
+-DQUDA_BUILD_SHAREDLIB=ON \
+-DQUDA_DIRAC_DEFAULT_OFF=ON \
+-DQUDA_DIRAC_STAGGERED=ON \
+-DQUDA_DOWNLOAD_USQCD=ON \
+-DQUDA_GPU_ARCH=${TARGET_GPU} \
+-DQUDA_QIO=ON \
+-DQUDA_QMP=ON \
+-DQUDA_TARGET_TYPE=HIP \
+-DROCM_PATH=${ROCM_PATH} \
+${QUDA_SRC}
+
+  _checkForFail $? "cmake QUDA"
+
+elif [ ${CLUSTER} == 'crusher' ]; then
 
   cmake \
 -DCMAKE_BUILD_TYPE=RELEASE \

@@ -5,22 +5,27 @@
 # 
 # C. DeTar, D. Clarke 
 # 
-# Environment script for MILC and QUDA compilation. 
+# Environment script for MILC and QUDA compilation. At the moment this
+# seems to be targeted for AMD... 
 # 
 
 source "${bashToolsPath}/bashTools.bash"
 
 #
-# Set cluster name here. Possibilities include:
-#   crusher, jlse, sunspot
+# User settings 
 #
-export CLUSTER=crusher
+export BUILDFOLDERMILC=buildMILC
+export CLUSTER=NONE
 
 
 _bashInfo "Loading modules for cluster ${CLUSTER}"
 
 
-if [ ${CLUSTER} == 'crusher' ]; then
+if [ ${CLUSTER} == NONE ]; then
+
+  _bashFail "Still a work in progress"
+
+elif [ ${CLUSTER} == 'crusher' ]; then
 
   module swap PrgEnv-cray PrgEnv-amd
   module load craype-accel-amd-gfx90a
@@ -80,7 +85,7 @@ MPI_LDFLAGS="-g -Wl,-rpath=${MPICH_DIR}/lib -L${MPICH_DIR}/lib -lmpi -L${GTL_ROO
 MPI_CFLAGS="-I${MPICH_DIR}/include -g"
 export PK_BUILD_TYPE="Release"
 
-echo
-echo "LOAD ENVIRONMENT ${CLUSTER}"
-echo
+
+_bashInfo "LOADED MILC/QUDA ENVIRONMENT ${CLUSTER}"
+
 
