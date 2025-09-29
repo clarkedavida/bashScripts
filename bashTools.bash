@@ -194,6 +194,7 @@ function _decompressTarball {
   if [ -f ${archive}.md5 ]; then
     md5sum -c --quiet ${archive}.md5
   fi    
+  _checkForFail $? "md5sum"
   tar -zxf ${archive}
   _checkForFail $? "decompress folder"
   rm ${archive}
@@ -279,6 +280,7 @@ function _openTarball {
   if [ -f ${archive}.md5 ]; then
     md5sum -c --quiet ${archive}.md5
   fi    
+  _checkForFail $? "md5sum"
   tar -xf ${archive}
   _checkForFail $? "open folder"
   rm ${archive}
