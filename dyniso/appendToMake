@@ -1,0 +1,247 @@
+DEBUG=0
+GAUGE_ACTION=symanzik_tree_action.h
+#GAUGE_ACTION=plaquette_action.h
+#ARCH=(x86|x86_64|mac)
+ARCH=x86_64
+CUDA=1
+OPENCL=0
+OPENCL_PROFILING=0
+
+# Enable or disable optimized kernels and memory layout both for OpenCL and CUDA
+USE_GPU_OPTIMIZATIONS=1
+
+# PROGRAM_PATH is the path to the opencl kernels (std is the program path)
+CL_PROG_PATH=${CURDIR}
+# do we want to read in precompiled OPENCL kernels?
+OPENCL_KNL_BIN=0
+
+# if BC is set to 1, antiperiodic BC is used in the spatial directions
+BC=0
+#use mcongrad or congrad in the update:
+MCG_OPT=1
+#cuda installation folder
+CUDALIB=/usr/local/cuda-12.8
+#cuda arch flag
+#CUDAARCH= -arch sm_120
+CUDAARCH= -arch sm_70
+#link against own ARPACK
+#LOCAL_ARPACK=-L/home/endrodi/ARPACK
+ARPACKFLAG= $(LOCAL_ARPACK) -larpack
+
+#slepc support available?
+SLEPC_SUPPORT=0
+
+#no-pie linker flag
+VPIE:=$(shell g++ -v 2>&1 | grep -c "enable-default-pie")
+ifeq ($(VPIE),1)
+PIE=-no-pie
+else
+PIE=
+endif
+
+#avoid creating executable stack from x86-64 assembly
+#https://stackoverflow.com/questions/73435637/how-can-i-fix-usr-bin-ld-warning-trap-o-missing-note-gnu-stack-section-imp
+PIE+= -z noexecstack
+
+DEFINES:=-DGA_FILE=\"$(GAUGE_ACTION)\"
+ifeq ($(BC),1)
+	DEFINES+= -DBC_AP
+endif
+ifeq ($(DEBUG),1)
+	DEFINES+= -DDEBUG -g
+endif
+ifeq ($(MCG_OPT),1)
+	DEFINES+= -DMCG_OPT
+endif
+
+default: dyniso
+
+VPATH= math/ include/
+
+### x86
+ifeq ($(if $(filter x86 mac x86_64, $(ARCH)),1,0),1)
+ARCHDIR=arch_x86
+OBJFORMAT=elf
+VPATH+= remes/ $(ARCHDIR)
+REMES=1
+CC               = gcc
+#CC               = mpicc
+LD               = gfortran
+#LD               = mpicc
+ASC		 = yasm
+
+.SUFFIXES: .asm
+.asm.o:
+	$(ASC) $(ASCFLAGS) -f $(OBJFORMAT) $< -o $(patsubst %.asm,%.o,$<)
+.c.o:
+	$(CC) $(CFLAGS) $< -c -o $(patsubst %.c,%.o,$<)
+
+#x86
+ifeq ($(ARCH),x86)
+CFLAGS = $(DEFINES) -DX86 -O3 -I./include -Wall -std=gnu99 -m32
+LDFLAGS=-L/usr/lib -lmpfr -lgmp -llapack -lblas $(ARPACKFLAG) -lm -m32 $(PIE)
+endif
+
+#x86_64
+ifeq ($(ARCH),x86_64)
+ASCFLAGS = -m amd64
+CFLAGS = $(DEFINES) -DX86 -O3 -I./include  -Wall -std=gnu99 -fgnu89-inline
+LDFLAGS=-L/usr/lib -llapack -lmpfr -lgmp -lblas $(ARPACKFLAG) -lm $(PIE)
+endif
+
+#mac
+ifeq ($(ARCH),mac)
+ASCFLAGS = 
+MACFLAG = -DMAC
+OBJFORMAT = macho
+CFLAGS = $(DEFINES) -DX86 ${MACFLAG} -O3 -I./include   -Wall -std=gnu99 
+LDFLAGS=-L/usr/lib -lmpfr -lgmp -llapack -lblas $(ARPACKFLAG) -lm
+endif
+
+#gpu with cuda
+ifeq ($(CUDA),1)
+CFLAGS+= -DCUDA -I${CUDALIB}/include/ 
+#-DPRINTF_COEFF
+ifeq ($(USE_GPU_OPTIMIZATIONS),1)
+	DEFINES+= -DUSE_GPU_OPTIMIZATIONS
+endif
+LDFLAGS+= -L${CUDALIB}/lib -L${CUDALIB}/lib64 -lcudart
+LD=g++
+NVCC=nvcc
+NVCFLAGS=${DEFINES} -DCUDA ${MACFLAG} ${CUDAARCH} -DX86 -I${CUDALIB}/include/ -I./include/
+.SUFFIXES: .cu
+.cu.o:
+	$(NVCC) $(NVCFLAGS) $< -c  -o $(patsubst %.cu,%.o,$<)
+VPATH+= arch_cuda
+
+endif
+
+#gpu with opencl
+ifeq ($(OPENCL),1)
+CFLAGS+= -DOPENCL -DPROG_PATH=\"$(CL_PROG_PATH)\"
+ifeq ($(OPENCL_PROFILING),1)
+	DEFINES+= -DOPENCL_PROFILING
+endif
+ifeq ($(USE_GPU_OPTIMIZATIONS),1)
+	DEFINES+= -DUSE_GPU_OPTIMIZATIONS
+endif
+ifeq ($(OPENCL_KNL_BIN),1)
+	DEFINES+= -DOPENCL_KNL_BIN
+endif
+LDFLAGS+= -lOpenCL
+VPATH+= arch_opencl
+endif
+
+endif
+
+#header
+HEADER = 		\
+	complex.h 	\
+	su3.h 		\
+	dirs.h		\
+	macros.h 	\
+	includes.h	\
+	io_lat.h 	\
+	lattice.h 	\
+	comdefs.h	\
+	machine.h
+
+MULTIPREC:=		\
+	smear_stout.c	\
+	flink_utils.c	\
+	latutil.c	\
+	path_product.c	\
+	dslash.c	\
+	flavor_ops.c	\
+	ax_gauge.c
+
+#source
+SOURCE:= 			\
+	control.c		\
+	setup.c			\
+	make_lattice.c		\
+	io_helpers.c		\
+	comp_su3.c		\
+	random.c		\
+	mt19937-64.c		\
+	reunitarize2.c		\
+	zolotarev.c		\
+	d_plaq4.c		\
+	flink_utils.c		\
+	latutil.c		\
+	dslash.c		\
+	congrad.c		\
+	congrad_isospin.c	\
+	mcongrad.c		\
+	mcongrad_isospin.c	\
+	smear_der_stout.c	\
+	gauge_stuff.c		\
+	update_u.c		\
+	update_h.c		\
+	update.c		\
+	actions.c		\
+	f_measure.c		\
+	ploop2.c		\
+	analyze.c		\
+	gaugefix2.c		\
+	w_loop1.c		\
+	w_loop2.c		\
+	smear_ape.c		\
+	smear_ape4.c		\
+	smear_hyp.c		\
+	spectrum.c		\
+	spectrum_nl.c		\
+	topch.c			\
+	d_measure.c		\
+	eigenv_arpack.c		\
+	eigenv_lapack.c		\
+	eigenv_utils.c		\
+	gcr.c			\
+	wflow.c			\
+	jjcorr.c		\
+	congrad_gpu_optimized.c
+
+#slepc stuff
+ifeq ($(SLEPC_SUPPORT),1)
+PETSC_DIR=/home/endrodi/Downloads/petsc-no-mpi
+SLEPC_DIR=/home/endrodi/Downloads/slepc-3.17.1-no-mpi
+CFLAGS += -DSLEPC -I${SLEPC_DIR}/buildOpt/include -I${PETSC_DIR}/buildOpt/include
+LDFLAGS+= -Wl,-rpath=${PETSC_DIR}/buildOpt/lib -Wl,-rpath=${PETSC_DIR}/arch-linux-c-opt/lib -Wl,-rpath=${SLEPC_DIR}/buildOpt/lib
+LDFLAGS+= -L${PETSC_DIR}/buildOpt/lib -L${PETSC_DIR}/arch-linux-c-opt/lib -lpetsc -L${SLEPC_DIR}/buildOpt/lib -lslepc
+SOURCE += eigenv_slepc.c
+endif
+
+#subdir sources and headers
+include math/module.mk
+include $(ARCHDIR)/module.mk
+ifeq ($(REMES),1)
+include remes/module.mk
+endif
+ifeq ($(CUDA),1)
+include arch_cuda/module.mk
+endif
+ifeq ($(OPENCL),1)
+include arch_opencl/module.mk
+endif
+
+eigenv_arpack.o: krylovschur.c
+
+OBJECT:=							\
+	$(patsubst %.c,%.o,$(filter %.c,$(SOURCE)))		\
+	$(patsubst %.cu,%.o,$(filter %.cu,$(SOURCE)))		\
+	$(patsubst %.asm,%.o,$(filter %.asm,$(SOURCE)))		\
+	$(patsubst %.gcc,%.o,$(filter %.gcc,$(SOURCE)))		\
+	$(patsubst %.xlc,%.o,$(filter %.xlc,$(SOURCE)))		\
+
+MP_OBJECT:= math/math_multiprec.o multiprec.o
+
+#targets
+$(OBJECT): $(HEADER) Makefile
+$(MP_OBJECT): $(MULTIPREC) $(HEADER) Makefile
+
+dyniso: $(OBJECT) $(MP_OBJECT)
+	$(LD) -o $@ $(MP_OBJECT) $(OBJECT) $(LDFLAGS)
+
+clean:
+	rm -rf *.o *~ ./*/*~ ./*/*/*~ ./*/*.o dyniso *.backup ./*/*.backup ./*/*/*.backup arch_opencl/*.o kernels_[fd].bin
+
