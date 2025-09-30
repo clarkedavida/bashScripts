@@ -2,9 +2,9 @@
 This is a collection of Bash scripts that I use to manipulate files, 
 submit jobs, and automate measurements for lattice QCD. These include:
 
-- `bashHacks.md`: A note to help remember how to accomplish various tasks in the terminal.
 - `bashTools.bash`: Some colors and error handing Bash functions.
 - `betaLists`: A collection of $N_f=2+1$ and $N_f=3$ parameter combinations for HotQCD.
+- `dyniso`: Some scripts to assist with building dyniso code.
 - `general`: A collection of general scripts, callable from the terminal.
 - `HotQCDTools.bash`: Some tools for managing parameter names using the conventions and lines of physics of the HotQCD collaboration.
 - `installBashTools.bash`: A simple script to set up these `bashTools`.
