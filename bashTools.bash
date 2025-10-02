@@ -118,9 +118,9 @@ function _checkIfParamEmpty {
 # Returns 0 if the extension matches.
 #
 function _checkExtension {
-  _checkIfParamEmpty "fileName" ${1}
-  _checkIfParamEmpty "extension" ${2}
-  case $1 in *.$2) return 0;; esac
+  _checkIfParamEmpty "fileName" "${1}"
+  _checkIfParamEmpty "extension" "${2}"
+  case "$1" in *."$2") return 0;; esac
   return 1
 }
 
@@ -131,8 +131,8 @@ function _checkExtension {
 #
 function _checkSum {
   local fileName=$1
-  _checkIfParamEmpty "fileName" ${fileName}
-  md5sum ${fileName} > ${fileName}.md5
+  _checkIfParamEmpty "fileName" "${fileName}"
+  md5sum "${fileName}" > "${fileName}.md5"
   _checkForFail $? "Unable to md5sum ${fileName}"
 }
 
@@ -147,10 +147,10 @@ function _compressFolder {
     _bashFail "must call on folder"
   fi
   echo "  "${subfolder}
-  tar -zcf ${subfolder}.tgz ${subfolder}
+  tar -zcf "${subfolder}.tgz" "${subfolder}"
   _checkForFail $? "compress folder"
-  _checkSum ${subfolder}.tgz
-  rm -rf ${subfolder}
+  _checkSum "${subfolder}.tgz"
+  rm -rf "${subfolder}"
 }
 
 
@@ -159,15 +159,15 @@ function _compressFolder {
 #   _createCompressedSubfolders folder
 #
 function _createCompressedSubfolders {
-  local folder=$1
-  _checkIfParamEmpty "folder" ${folder} 
+  local folder="$1"
+  _checkIfParamEmpty "folder" "${folder}"
   echo
   echo "Compressing subfolders using tar..."
-  cd ${folder}
+  cd "${folder}"
   for subfolder in *; do
-    if [ ! -d ${subfolder} ]; then continue; fi
+    if [ ! -d "${subfolder}" ]; then continue; fi
     ((i=i%MAXPROCESSES)); ((i++==0)) && wait
-    _compressFolder ${subfolder} &
+    _compressFolder "${subfolder}" &
   done
   cd ..
   wait
@@ -182,24 +182,24 @@ function _createCompressedSubfolders {
 #   _decompressTarball archive
 #
 function _decompressTarball {
-  local archive=$1
-  _checkExtension ${archive} tgz
+  local archive="$1"
+  _checkExtension "${archive}" tgz
   if [ $? -eq 1 ]; then
-    _checkExtension ${archive} gz
+    _checkExtension "${archive}" gz
     if [ $? -eq 1 ]; then
       _bashFail "must call on .tgz or .gz file"
     fi
   fi 
-  echo "  "${archive}
-  if [ -f ${archive}.md5 ]; then
-    md5sum -c --quiet ${archive}.md5
+  echo "  ${archive}"
+  if [ -f "${archive}.md5" ]; then
+    md5sum -c --quiet "${archive}.md5"
   fi    
   _checkForFail $? "md5sum"
-  tar -zxf ${archive}
+  tar -zxf "${archive}"
   _checkForFail $? "decompress folder"
-  rm ${archive}
-  if [ -f ${archive}.md5 ]; then
-    rm ${archive}.md5
+  rm "${archive}"
+  if [ -f "${archive}.md5" ]; then
+    rm "${archive}.md5"
   fi    
 }
 
@@ -210,15 +210,15 @@ function _decompressTarball {
 #
 function _decompressSubfolders {
   local folder=$1
-  _checkIfParamEmpty "folder" ${folder} 
+  _checkIfParamEmpty "folder" "${folder}" 
   echo
   echo "Decompressing archives using tar..."
-  cd ${folder}
+  cd "${folder}"
   for archive in *; do
-    _checkExtension ${archive} tgz
+    _checkExtension "${archive}" tgz
     if [ $? -eq 1 ]; then continue; fi
     ((i=i%MAXPROCESSES)); ((i++==0)) && wait
-    _decompressTarball ${archive} &
+    _decompressTarball "${archive}" &
   done
   wait
   cd ..
@@ -234,12 +234,12 @@ function _decompressSubfolders {
 #
 function _tarFolder {
   local subfolder=$1
-  if [ ! -d ${subfolder} ]; then continue; fi
-  echo "  "${subfolder}
-  tar -cf ${subfolder}.tar ${subfolder}
+  if [ ! -d "${subfolder}" ]; then continue; fi
+  echo "  ${subfolder}"
+  tar -cf "${subfolder}.tar" "${subfolder}"
   _checkForFail $? "compress folder"
-  _checkSum ${subfolder}.tar
-  rm -rf ${subfolder}
+  _checkSum "${subfolder}.tar"
+  rm -rf "${subfolder}"
 } 
 
 
@@ -248,15 +248,15 @@ function _tarFolder {
 #   _createTarSubfolders folder
 #
 function _createTarSubfolders {
-  local folder=$1
-  _checkIfParamEmpty "folder" ${folder} 
+  local folder="$1"
+  _checkIfParamEmpty "folder" "${folder}"
   echo
   echo "Combining subfolders using tar..."
-  cd ${folder}
+  cd "${folder}"
   for subfolder in *; do
-    if [ ! -d ${subfolder} ]; then continue; fi
+    if [ ! -d "${subfolder}" ]; then continue; fi
     ((i=i%MAXPROCESSES)); ((i++==0)) && wait
-    _tarFolder ${subfolder} &
+    _tarFolder "${subfolder}" &
   done
   wait
   cd ..
@@ -271,21 +271,21 @@ function _createTarSubfolders {
 #   _decompressTarball archive
 #
 function _openTarball {
-  local archive=$1
-  _checkExtension ${archive} tar
+  local archive="$1"
+  _checkExtension "${archive}" tar
   if [ $? -eq 1 ]; then
     _bashFail "must call on .tar file" 
   fi 
-  echo "  "${archive}
-  if [ -f ${archive}.md5 ]; then
-    md5sum -c --quiet ${archive}.md5
+  echo "  ${archive}"
+  if [ -f "${archive}.md5" ]; then
+    md5sum -c --quiet "${archive}.md5"
   fi    
   _checkForFail $? "md5sum"
-  tar -xf ${archive}
+  tar -xf "${archive}"
   _checkForFail $? "open folder"
-  rm ${archive}
-  if [ -f ${archive}.md5 ]; then
-    rm ${archive}.md5
+  rm "${archive}"
+  if [ -f "${archive}.md5" ]; then
+    rm "${archive}.md5"
   fi    
 }
 
@@ -295,16 +295,16 @@ function _openTarball {
 #   _openTarSubfolders folder
 #
 function _openTarSubfolders {
-  local folder=$1
-  _checkIfParamEmpty "folder" ${folder} 
+  local folder="$1"
+  _checkIfParamEmpty "folder" "${folder} "
   echo
   echo "Open subfolders using tar..."
-  cd ${folder}
+  cd "${folder}"
   for archive in *; do
-    _checkExtension ${archive} tar
+    _checkExtension "${archive}" tar
     if [ $? -eq 1 ]; then continue; fi
     ((i=i%MAXPROCESSES)); ((i++==0)) && wait
-    _openTarball ${archive} &
+    _openTarball "${archive}" &
   done
   wait
   cd ..
@@ -320,7 +320,7 @@ function _openTarSubfolders {
 # Returns 0 if the files are identical.
 #
 function _compareFiles {
-  diff $1 $2 &>/dev/null
+  diff "$1" "$2" &>/dev/null
   return $?
 }
 
@@ -358,7 +358,7 @@ function _bitFlip {
 #
 function _confirmAction {
   read -p "$1 (Y/y to proceed.) "
-  if ! [[ $REPLY =~ [Yy]$ ]]; then
+  if ! [[ "$REPLY" =~ [Yy]$ ]]; then
     exit
   fi
 }
@@ -369,7 +369,7 @@ function _confirmAction {
 #   _lookForFile fileName
 #
 function _lookForFile {
-  if [ ! -f $1 ]; then _bashFail "Missing required file $1"; fi
+  if [ ! -f "$1" ]; then _bashFail "Missing required file $1"; fi
 }
 
 
@@ -378,13 +378,13 @@ function _lookForFile {
 #   _countFilesInFolder l3216f3b6315m00281m07587 "*.check"
 #
 function _countFilesInFolder {
-  _checkIfParamEmpty "folder name" $1
+  _checkIfParamEmpty "folder name" "$1"
   if [ -z ${2} ]; then
     echo "Counting all files." 
-    find $1 -type f | wc -l
+    find "$1" -type f | wc -l
   else
     echo "Counting files of form $2" 
-    find $1 -type f -name $2 | wc -l
+    find "$1" -type f -name "$2" | wc -l
   fi
 }
 
@@ -416,8 +416,8 @@ function _removeTrailingWhitespace {
 #   _checkNewlineEOF filename.txt
 #
 function _checkNewlineEOF {
-  num_lines=$(wc -l < $1)
-  last_char=$(tail -c 1 $1)
+  num_lines=$(wc -l < "$1")
+  last_char=$(tail -c 1 "$1")
   if [ $num_lines -gt 0 ] && [ "$last_char" == "" ]; then
     : 
   else
@@ -431,11 +431,9 @@ function _checkNewlineEOF {
 #   _startsWith helloWorld hello
 #
 function _startsWith {
-  string=$1
-  substring=$2
-  _checkIfParamEmpty "string" ${1}
-  _checkIfParamEmpty "substring" ${2}
-  if [[ $1 == "$2"* ]]; then
+  _checkIfParamEmpty "string" "${1}"
+  _checkIfParamEmpty "substring" "${2}"
+  if [[ "$1" == "$2"* ]]; then
       return 0 
   else
       return 1 
