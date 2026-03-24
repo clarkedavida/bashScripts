@@ -27,7 +27,7 @@ export BUILDFOLDER=buildSIMULATeQCD
 export GITLFSFOLDER=${HOME}/git-lfs
 export CONFSCRIPT=configureSIMULATeQCD.bash
 export CLEANSCRIPT=cleanSIMULATeQCD.bash
-export CLUSTER=fermilab
+export CLUSTER=NONE
 export GITTWOFACTOR=true
 
 #
@@ -46,6 +46,10 @@ if [ ${CLUSTER} == NONE ]; then
   _checkForFail $? 'You need to install CUDA'
   mpirun --version > /dev/null 2>&1
   _checkForFail $? 'You need to install OPENMPI'
+  export CUDA_HOME=/opt/cuda
+  export CUDA_PATH=/opt/cuda
+  export PATH=${CUDA_HOME}/bin${PATH:+:${PATH}}
+  export LD_LIBRARY_PATH=${CUDA_PATH}/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
 elif [ ${CLUSTER} == 'crusher' ]; then
 
