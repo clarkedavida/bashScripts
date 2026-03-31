@@ -146,7 +146,7 @@ function _compressFolder {
   if [ ! -d ${subfolder} ]; then 
     _bashFail "must call on folder"
   fi
-  echo "  "${subfolder}
+  _bashInfo "  "${subfolder}
   tar -zcf "${subfolder}.tgz" "${subfolder}"
   _checkForFail $? "compress folder"
   _checkSum "${subfolder}.tgz"
@@ -161,8 +161,8 @@ function _compressFolder {
 function _createCompressedSubfolders {
   local folder="$1"
   _checkIfParamEmpty "folder" "${folder}"
-  echo
-  echo "Compressing subfolders using tar..."
+  _bashInfo "" 
+  _bashInfo "Compressing subfolders using tar..."
   cd "${folder}"
   for subfolder in *; do
     if [ ! -d "${subfolder}" ]; then continue; fi
@@ -171,9 +171,9 @@ function _createCompressedSubfolders {
   done
   cd ..
   wait
-  echo
-  echo "Done."
-  echo
+  _bashInfo 
+  _bashInfo "Done."
+  _bashInfo 
 }
 
 
@@ -190,7 +190,7 @@ function _decompressTarball {
       _bashFail "must call on .tgz or .gz file"
     fi
   fi 
-  echo "  ${archive}"
+  _bashInfo "  ${archive}"
   if [ -f "${archive}.md5" ]; then
     md5sum -c --quiet "${archive}.md5"
   fi    
@@ -211,8 +211,8 @@ function _decompressTarball {
 function _decompressSubfolders {
   local folder=$1
   _checkIfParamEmpty "folder" "${folder}" 
-  echo
-  echo "Decompressing archives using tar..."
+  _bashInfo 
+  _bashInfo "Decompressing archives using tar..."
   cd "${folder}"
   for archive in *; do
     _checkExtension "${archive}" tgz
@@ -222,9 +222,9 @@ function _decompressSubfolders {
   done
   wait
   cd ..
-  echo
-  echo "Done."
-  echo
+  _bashInfo "" 
+  _bashInfo "Done."
+  _bashInfo ""  
 }
 
 
@@ -235,7 +235,7 @@ function _decompressSubfolders {
 function _tarFolder {
   local subfolder=$1
   if [ ! -d "${subfolder}" ]; then continue; fi
-  echo "  ${subfolder}"
+  _bashInfo "  ${subfolder}"
   tar -cf "${subfolder}.tar" "${subfolder}"
   _checkForFail $? "compress folder"
   _checkSum "${subfolder}.tar"
@@ -250,8 +250,8 @@ function _tarFolder {
 function _createTarSubfolders {
   local folder="$1"
   _checkIfParamEmpty "folder" "${folder}"
-  echo
-  echo "Combining subfolders using tar..."
+  _bashInfo "" 
+  _bashInfo "Combining subfolders using tar..."
   cd "${folder}"
   for subfolder in *; do
     if [ ! -d "${subfolder}" ]; then continue; fi
@@ -260,9 +260,9 @@ function _createTarSubfolders {
   done
   wait
   cd ..
-  echo
-  echo "Done."
-  echo
+  _bashInfo "" 
+  _bashInfo "Done."
+  _bashInfo "" 
 }
 
 
@@ -276,7 +276,7 @@ function _openTarball {
   if [ $? -eq 1 ]; then
     _bashFail "must call on .tar file" 
   fi 
-  echo "  ${archive}"
+  _bashInfo "  ${archive}"
   if [ -f "${archive}.md5" ]; then
     md5sum -c --quiet "${archive}.md5"
   fi    
@@ -297,8 +297,8 @@ function _openTarball {
 function _openTarSubfolders {
   local folder="$1"
   _checkIfParamEmpty "folder" "${folder} "
-  echo
-  echo "Open subfolders using tar..."
+  _bashInfo 
+  _bashInfo "Open subfolders using tar..."
   cd "${folder}"
   for archive in *; do
     _checkExtension "${archive}" tar
@@ -308,9 +308,9 @@ function _openTarSubfolders {
   done
   wait
   cd ..
-  echo
-  echo "Done."
-  echo
+  _bashInfo "" 
+  _bashInfo "Done."
+  _bashInfo 
 }
 
 
@@ -380,10 +380,10 @@ function _lookForFile {
 function _countFilesInFolder {
   _checkIfParamEmpty "folder name" "$1"
   if [ -z ${2} ]; then
-    echo "Counting all files." 
+    _bashInfo "Counting all files." 
     find "$1" -type f | wc -l
   else
-    echo "Counting files of form $2" 
+    _bashInfo "Counting files of form $2" 
     find "$1" -type f -name "$2" | wc -l
   fi
 }
@@ -421,7 +421,7 @@ function _checkNewlineEOF {
   if [ $num_lines -gt 0 ] && [ "$last_char" == "" ]; then
     : 
   else
-    echo "$1 has no newline at EOF"
+    _bashWarn "$1 has no newline at EOF"
   fi
 }
 
@@ -438,6 +438,18 @@ function _startsWith {
   else
       return 1 
   fi
+}
+
+
+#
+# DELETE A REGULAR FILE ONLY IF IT EXISTS
+#
+function _deleteFile {
+_checkIfParamEmpty "file" "${1}"
+if [ -f "$1" ]; then
+    rm "$1"
+    _bashInfo "Delete regular file $1."
+fi
 }
 
 
