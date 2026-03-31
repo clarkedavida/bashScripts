@@ -459,3 +459,14 @@ fi
 function _touchEverything {
   find . -exec touch {} \;
 }
+
+
+#
+# DELETE ALL EMPTY FILES IN CURRENT DIRECTORY.
+#
+function _rmEmpty {
+  find . -type f -empty -exec rm -v {} \;
+}
+
+
+
