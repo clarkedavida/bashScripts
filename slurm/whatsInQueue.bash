@@ -5,6 +5,8 @@ whatsMyPrio=$(sprio -u "$(whoami)" --noheader)
 
 declare -A jobPriority
 
+whitespace='  '
+
 # Collect priority
 while read -r job; do
     [[ -z "$job" ]] && continue
