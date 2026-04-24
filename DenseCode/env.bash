@@ -26,12 +26,12 @@ if [ ${CLUSTER} == 'fermilab' ]; then
 #  module load ucx_cuda/1.14.1_cuda_12.2.1
 #  module load ucc_cuda/1.2.0_cuda_12.2.1
 
-  # IF THIS DOESN'T WORK:
-  # try CUDA 11
-  # try CUDA 11 with tschebysheff filter branch
   module unload gcc
+#  module load cuda/11.8.0
+  module load cmake
   module load gcc/11.4.0
-  module load cuda/12.2.1
+  module load ucx_cuda ucc_cuda
+
   export GPUMAKE=cuda
   export GPUARCH=80
 

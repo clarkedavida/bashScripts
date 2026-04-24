@@ -27,7 +27,7 @@ export BUILDFOLDER=buildSIMULATeQCD
 export GITLFSFOLDER=${HOME}/git-lfs
 export CONFSCRIPT=configureSIMULATeQCD.bash
 export CLEANSCRIPT=cleanSIMULATeQCD.bash
-export CLUSTER=NONE
+export CLUSTER=fermilab
 export GITTWOFACTOR=true
 
 #
