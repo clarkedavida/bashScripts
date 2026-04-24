@@ -12,9 +12,12 @@ while read -r job; do
     ID=${jobInfo[0]}
     prio=${jobInfo[3]}
     jobPriority[$ID]=$prio
+    IDlength=${#ID}
+    length=$((IDlength - 5))
+    whitespace=$(printf "%${length}s" "")
 done <<< "$whatsMyPrio"
 
-echo " JOBID PARTITION           NAME     USER      STATE       TIME TIME_LIMI  NODES NODELIST(REASON)  PRIORITY"
+echo "${whitespace}JOBID PARTITION           NAME     USER      STATE       TIME TIMELIMIT  NODES NODELIST(REASON)  PRIORITY"
 
 # Process jobs and print with priority
 while read -r job; do
