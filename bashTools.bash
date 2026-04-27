@@ -469,4 +469,24 @@ function _rmEmpty {
 }
 
 
+#
+# SYNC A FOLDER WITH A TGZ ARCHIVE
+#
+function _syncFoldWithTgz {
+  src="$1"
+  tgt="$2"
+  if [ ! -f "${tgt}" ]; then
+    _bashFail "tgt must be regular file"
+  fi
+  if [ ! -d "${src}" ]; then
+    _bashFail "src must be directory"
+  fi
+  _checkExtension "${tgt}" "tgz"
+  _decompressTarball "${tgt}"
+  tgtFold="${tgt%.tgz}"
+  rsync -av "${src}"/. "${tgtFold}"/.
+  _compressFolder "${tgtFold}"
+  _bashInfo "Done!" 
+}
+
 
