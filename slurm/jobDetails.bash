@@ -1,9 +1,10 @@
 #!/bin/bash
 
-source "${bashToolsPath}/bashTools.bash"
+#source "${bashToolsPath}/bashTools.bash"
+#JOBID=$1
+#_checkIfParamEmpty "JOBID" ${JOBID}
+#scontrol show job ${JOBID}
 
-JOBID=$1
+source "${bashToolsPath}/slurmTools.bash"
+_showJobDetails "$1"
 
-_checkIfParamEmpty "JOBID" ${JOBID}
-
-scontrol show job ${JOBID}

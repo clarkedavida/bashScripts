@@ -2,17 +2,19 @@
 This is a collection of Bash scripts that I use to manipulate files, 
 submit jobs, and automate measurements for lattice QCD. These include:
 
-- `bashTools.bash`: Some colors and error handing Bash functions.
+- `bashTools.bash`: General Bash functions to make Bash scripting a bit easier. 
 - `betaLists`: A collection of $N_f=2+1$ and $N_f=3$ parameter combinations for HotQCD.
-- `dyniso`: Some scripts to assist with building dyniso code.
+- `DenseCode`: Some scripts to assist with building DenseCode.
+- `dyniso`: Some scripts to assist with building dyniso.
 - `general`: A collection of general scripts, callable from the terminal.
 - `HotQCDTools.bash`: Some tools for managing parameter names using the conventions and lines of physics of the HotQCD collaboration.
 - `installBashTools.bash`: A simple script to set up these `bashTools`.
-- `MILC`: Some scripts to assist with building MILC code.
+- `MILC`: Some scripts to assist with building MILC.
 - `profilingExamples`: Some examples how to use profilers. These could be made more general later.
 - `SIMULATeQCD`: Some scripts to assist with building SIMULATeQCD. 
 - `simulationManagement`: Script to assist with setting up lattice runs.
 - `slurm`: A collection of scripts to help manage clusters using slurm.
+- `slurmTools.bash`: Slurm functions to make writing job scripts easier. 
 - `tests`: Some tests to make sure the installation worked. 
 
 To get the bashTools ready, simply
