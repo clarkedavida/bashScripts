@@ -104,9 +104,9 @@ function _checkPassError {
 #   _checkIfParamEmpty ${paramName} ${param}
 #
 function _checkIfParamEmpty {
-  paramName=$1
-  param=$2
-  if [ -z ${param} ]; then
+  paramName="$1"
+  param="$2"
+  if [ -z "${param}" ]; then
     _bashFail "Please set ${paramName}"
   fi
 }
@@ -130,7 +130,7 @@ function _checkExtension {
 #   _checkSum fileName
 #
 function _checkSum {
-  local fileName=$1
+  local fileName="$1"
   _checkIfParamEmpty "fileName" "${fileName}"
   md5sum "${fileName}" > "${fileName}.md5"
   _checkForFail $? "Unable to md5sum ${fileName}"
@@ -142,7 +142,7 @@ function _checkSum {
 #   _compressFolder subfolder
 #
 function _compressFolder {
-  local subfolder=$1
+  local subfolder="$1"
   if [ ! -d ${subfolder} ]; then 
     _bashFail "must call on folder"
   fi
@@ -209,7 +209,7 @@ function _decompressTarball {
 #   _decompressSubfolders folder
 #
 function _decompressSubfolders {
-  local folder=$1
+  local folder="$1"
   _checkIfParamEmpty "folder" "${folder}" 
   _bashInfo 
   _bashInfo "Decompressing archives using tar..."
@@ -233,7 +233,7 @@ function _decompressSubfolders {
 #   _tarFolder subfolder
 #
 function _tarFolder {
-  local subfolder=$1
+  local subfolder="$1"
   if [ ! -d "${subfolder}" ]; then continue; fi
   _bashInfo "  ${subfolder}"
   tar -cf "${subfolder}.tar" "${subfolder}"
@@ -379,7 +379,7 @@ function _lookForFile {
 #
 function _countFilesInFolder {
   _checkIfParamEmpty "folder name" "$1"
-  if [ -z ${2} ]; then
+  if [ -z "${2}" ]; then
     _bashInfo "Counting all files." 
     find "$1" -type f | wc -l
   else
@@ -404,7 +404,7 @@ function _countTotalFiles {
 #   _removeTrailingWhitespace filename.txt
 #
 function _removeTrailingWhitespace {
-  _checkIfParamEmpty "file name" $1
+  _checkIfParamEmpty "file name" "$1"
   if [ -f "$1" ]; then
     sed -i 's/[[:blank:]]*$//' "$1"
   fi 
