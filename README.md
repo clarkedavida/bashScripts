@@ -36,5 +36,6 @@ can set `CLUSTER=NONE` and set the `DEFAULTMAKE` and `DEFAULTARCH` according
 to the hardware you have available.
 
 ## Ackowledgements
+Thanks to Claude code to make this work also for MacOS.
 Special thanks to [C. DeTar](https://github.com/detar) 
 for helping me interface with MILC. 

@@ -60,8 +60,8 @@ for i in "${streams[@]}"; do
    newSeed=$((BASHTOOLSSEED+$i))
    newPrefix=${seedPrefix/${streamStartDemarc}[^.]*${streamEndDemarc}/${streamStartDemarc}${i}${streamEndDemarc}}
    echo $newPrefix
-   sed -i -e "s/${seedRandTag} *= *[0-9]*/${seedRandTag} = ${newSeed}/g" "${streamFold}/${paramFile}"
-   sed -i -e "s/${inConfTag}.*/${inConfTag} = ${newPrefix}/g" "${streamFold}/${paramFile}"
+   _sedInPlace -e "s/${seedRandTag} *= *[0-9]*/${seedRandTag} = ${newSeed}/g" "${streamFold}/${paramFile}"
+   _sedInPlace -e "s/${inConfTag}.*/${inConfTag} = ${newPrefix}/g" "${streamFold}/${paramFile}"
 
 done
 

@@ -9,24 +9,52 @@
 #
 
 
-# Whatever you do, do not google this date. 
+# Whatever you do, do not google this date.
 export BASHTOOLSSEED=7281978
 export MAXPROCESSES=8
+
+
+#
+# OS DETECTION. Some commands (sed, date, readlink, ...) take different
+# flags on macOS (BSD userland) than on Linux (GNU userland). Use this to
+# branch when it matters. Example use:
+#   if [ "${BASHTOOLSOS}" == "macos" ]; then ...; fi
+#
+case "$(uname -s)" in
+  Darwin) export BASHTOOLSOS="macos" ;;
+  Linux)  export BASHTOOLSOS="linux" ;;
+  *)      export BASHTOOLSOS="other" ;;
+esac
+
+
+#
+# PORTABLE IN-PLACE SED. GNU sed accepts `sed -i 'script' file`, while BSD
+# sed (macOS) requires an argument to -i, even if empty, and otherwise
+# swallows the next argument as a backup suffix. Example use:
+#   _sedInPlace 's/foo/bar/' file.txt
+#
+function _sedInPlace {
+  if [ "${BASHTOOLSOS}" == "macos" ]; then
+    sed -i '' "$@"
+  else
+    sed -i "$@"
+  fi
+}
 
 
 #
 # COLORS. Example use: 
 #   echo -e "  ${cred}ERROR encountered while running in this folder!${endc}"
 #
-endc="\e[0m"
-cblk="\e[90m"
-cred="\e[91m"
-cgrn="\e[92m" 
-cyel="\e[93m" 
-cblu="\e[94m" 
-cpur="\e[95m" 
-ccyn="\e[96m" 
-cwhi="\e[97m"
+endc="\033[0m"
+cblk="\033[90m"
+cred="\033[91m"
+cgrn="\033[92m"
+cyel="\033[93m"
+cblu="\033[94m"
+cpur="\033[95m"
+ccyn="\033[96m"
+cwhi="\033[97m"
 
 
 #
@@ -406,7 +434,7 @@ function _countTotalFiles {
 function _removeTrailingWhitespace {
   _checkIfParamEmpty "file name" "$1"
   if [ -f "$1" ]; then
-    sed -i 's/[[:blank:]]*$//' "$1"
+    _sedInPlace 's/[[:blank:]]*$//' "$1"
   fi 
 }
 
